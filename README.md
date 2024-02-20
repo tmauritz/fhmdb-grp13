@@ -1,6 +1,5 @@
-## PRG2 - Exercise 1 Template Repository
-Use this repository as a template for your PRG2 exercise 1 submission. The template serves as a guideline to complete your exercise 1 with JavaFX.
-You can do any changes you want to the code.
+## PRG2 - Exercise Repository
+This application is developed during PRG2 at the FH Campus Wien.
 
 ### Start the application
 Start the application by either running the `main` method in the `FhmdbApplication` class or by running `mvn clean javafx:run` in Maven.
