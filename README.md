@@ -1,6 +1,7 @@
 ## PRG2 - Exercise Repository
 This application is developed during PRG2 at the FH Campus Wien.
 
+
 ### Start the application
 Start the application by either running the `main` method in the `FhmdbApplication` class or by running `mvn clean javafx:run` in Maven.
 
