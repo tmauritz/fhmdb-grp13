@@ -7,10 +7,12 @@ public class Movie {
     private String title;
     private String description;
     // TODO add more properties here
+    private Genre genre;
 
-    public Movie(String title, String description) {
+    public Movie(String title, String description, Genre genre) {
         this.title = title;
         this.description = description;
+        this.genre = genre;
     }
 
     public String getTitle() {
