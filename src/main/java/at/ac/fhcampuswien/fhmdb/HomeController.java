@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
@@ -61,5 +62,10 @@ public class HomeController implements Initializable {
         });
 
 
+    }
+
+    public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre){
+        List<Movie> filteredMovies = movies;
+        return filteredMovies;
     }
 }
