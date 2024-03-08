@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Comparable<Movie>{
     private String title;
     private String description;
     // TODO add more properties here
@@ -54,5 +54,10 @@ public class Movie {
         movies.add(movie10);
 
         return movies;
+    }
+
+    @Override
+    public int compareTo(Movie o){
+        return this.title.compareTo(o.getTitle());
     }
 }

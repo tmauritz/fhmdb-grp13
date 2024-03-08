@@ -13,9 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HomeController implements Initializable {
     @FXML
@@ -67,13 +65,18 @@ public class HomeController implements Initializable {
 
     public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre){
         List<Movie> filteredMovies = movies;
+        query = query.trim().replaceAll("\\s{2,}", " ");
         if(movies == null || query == null || genre == null) throw new IllegalArgumentException();
         if(genre != Genre.ALL) filteredMovies = filteredMovies.stream().filter(movie -> movie.getGenres().contains(genre)).toList();
-        if(!query.isBlank()) filteredMovies = filteredMovies.stream().filter(movie -> movie.getTitle().contains(query) || movie.getDescription().contains(query)).toList();
+        if(!query.isBlank()){
+            String finalQuery = query;
+            filteredMovies = filteredMovies.stream().filter(movie -> movie.getTitle().contains(finalQuery) || movie.getDescription().contains(finalQuery)).toList();
+        }
         return filteredMovies;
     }
 
     public List<Movie> sortMovies(List<Movie> movies,boolean ascending){
+        Collections.sort(movies);
         return movies;
     }
 }
