@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HomeControllerTest {
+    /* --------- Genre Filter --------*/
     @Test
     public void show_only_movies_of_the_selected_genre_filter(){
         //GIVEN
@@ -56,6 +56,7 @@ public class HomeControllerTest {
         assertEquals(allTestMovies,filteredMovies);
     }
 
+    /* --------- Query Filter --------*/
     @Test
     public void show_only_movies_with_search_query_matching_titles(){
         //GIVEN
@@ -78,7 +79,28 @@ public class HomeControllerTest {
         //THEN
         assertEquals(expectedMovie,filteredMovies);
     }
+    @Test
+    public void show_only_movies_with_search_query_partly_matching_titles(){
+        //GIVEN
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
 
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        List<Movie> expectedMovie = new ArrayList<>();
+        expectedMovie.add(movie3);
+
+        //WHEN
+        HomeController testController = new HomeController();
+        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"ers in the Dark",Genre.ALL);
+
+        //THEN
+        assertEquals(expectedMovie,filteredMovies);
+    }
 
     @Test
     public void show_only_movies_with_search_query_matching_descriptions(){
@@ -103,66 +125,12 @@ public class HomeControllerTest {
         assertEquals(expectedMovie,filteredMovies);
     }
 
-
     @Test
-    public void throw_illegal_argument_exception_when_genre_is_null(){
+    public void show_all_movies_when_empty_query_is_sent(){
         //GIVEN
         HomeController homeController = new HomeController();
         Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
-        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
-        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
-
-        List<Movie> allTestMovies = new ArrayList<>();
-        allTestMovies.add(movie1);
-        allTestMovies.add(movie2);
-        allTestMovies.add(movie3);
-
-        //WHEN THEN
-        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(allTestMovies, "", null));
-
-    }
-
-    @Test
-    public void throw_illegal_argument_exception_when_movie_list_is_null(){
-        //GIVEN
-        HomeController homeController = new HomeController();
-        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
-        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
-        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
-
-        List<Movie> allTestMovies = new ArrayList<>();
-        allTestMovies.add(movie1);
-        allTestMovies.add(movie2);
-        allTestMovies.add(movie3);
-
-        //WHEN THEN
-        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(null, "", Genre.ROMANCE));
-
-    }
-    @Test
-    public void throw_illegal_argument_exception_when_query_is_null(){
-        //GIVEN
-        HomeController homeController = new HomeController();
-        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
-        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
-        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
-
-        List<Movie> allTestMovies = new ArrayList<>();
-        allTestMovies.add(movie1);
-        allTestMovies.add(movie2);
-        allTestMovies.add(movie3);
-
-        //WHEN THEN
-        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(allTestMovies, null, Genre.ROMANCE));
-
-    }
-
-    @Test
-    public void query_finds_movies_but_genre_does_not_fit(){
-        //GIVEN
-        HomeController homeController = new HomeController();
-        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
-        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie2 = new Movie("Chrono Paradox", "Chrono Paradox: A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
         Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
 
         List<Movie> allTestMovies = new ArrayList<>();
@@ -171,13 +139,13 @@ public class HomeControllerTest {
         allTestMovies.add(movie3);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "Chrono Paradox", Genre.BIOGRAPHY);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "", Genre.ALL);
 
         //THEN
-        assertTrue(resultMovie.isEmpty());
-
+        assertEquals(resultMovie,allTestMovies);
     }
 
+    /* --------- Mixed Filter Tests--------*/
     @Test
     public void show_movies_matching_title_and_description_only_once(){
         //GIVEN
@@ -199,9 +167,126 @@ public class HomeControllerTest {
 
         //THEN
         assertEquals(resultMovie, expectedMovies);
-
     }
 
+    /* --------- Sorting Tests--------*/
+    @Test
+    public void sort_movies_ascending_by_title(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "Chrono Paradox: A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
 
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
 
+        List<Movie> expectedMovies = new ArrayList<>();
+        expectedMovies.add(movie2);
+        expectedMovies.add(movie1);
+        expectedMovies.add(movie3);
+
+        //WHEN
+        List<Movie> resultMovie = homeController.sortMovies(allTestMovies, true);
+
+        //THEN
+        assertEquals(resultMovie, expectedMovies);
+    }
+    @Test
+    public void sort_movies_descending_by_title(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "Chrono Paradox: A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        List<Movie> expectedMovies = new ArrayList<>();
+        expectedMovies.add(movie3);
+        expectedMovies.add(movie1);
+        expectedMovies.add(movie2);
+
+        //WHEN
+        List<Movie> resultMovie = homeController.sortMovies(allTestMovies, false);
+
+        //THEN
+        assertEquals(resultMovie, expectedMovies);
+    }
+
+    /* --------- Null Pointer Tests--------*/
+    @Test
+    public void throw_illegal_argument_exception_when_genre_is_null(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        //WHEN THEN
+        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(allTestMovies, "", null));
+    }
+
+    @Test
+    public void throw_illegal_argument_exception_when_movie_list_is_null(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        //WHEN THEN
+        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(null, "", Genre.ROMANCE));
+    }
+    @Test
+    public void throw_illegal_argument_exception_when_query_is_null(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        //WHEN THEN
+        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(allTestMovies, null, Genre.ROMANCE));
+    }
+
+    @Test
+    public void query_finds_movies_but_genre_does_not_fit(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie("Ephemeral Echoes", "In a world where memories can be bought and sold, a man discovers a black market dealing in forgotten dreams. As he delves into the surreal landscapes of other people's minds, he uncovers a conspiracy that threatens to erase the very fabric of reality.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.THRILLER)));
+        Movie movie2 = new Movie("Chrono Paradox", "A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
+        Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        //WHEN
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "Chrono Paradox", Genre.BIOGRAPHY);
+
+        //THEN
+        assertTrue(resultMovie.isEmpty());
+    }
 }

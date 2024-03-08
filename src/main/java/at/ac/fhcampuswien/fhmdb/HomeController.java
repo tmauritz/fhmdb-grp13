@@ -67,6 +67,13 @@ public class HomeController implements Initializable {
 
     public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre){
         List<Movie> filteredMovies = movies;
-        return new ArrayList<>();
+        if(movies == null || query == null || genre == null) throw new IllegalArgumentException();
+        if(genre != Genre.ALL) filteredMovies = filteredMovies.stream().filter(movie -> movie.getGenres().contains(genre)).toList();
+        if(!query.isBlank()) filteredMovies = filteredMovies.stream().filter(movie -> movie.getTitle().contains(query) || movie.getDescription().contains(query)).toList();
+        return filteredMovies;
+    }
+
+    public List<Movie> sortMovies(List<Movie> movies,boolean ascending){
+        return movies;
     }
 }
