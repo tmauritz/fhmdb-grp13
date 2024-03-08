@@ -45,6 +45,8 @@ public class HomeController implements Initializable {
 
         // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
+        ObservableList<Genre> genreObservableList = FXCollections.observableArrayList(Genre.values());
+        genreComboBox.setItems(genreObservableList);
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
@@ -58,6 +60,11 @@ public class HomeController implements Initializable {
                 // TODO sort observableMovies descending
                 sortBtn.setText("Sort (asc)");
             }
+        });
+
+        searchBtn.setOnAction(actionEvent -> {
+            observableMovies.clear();
+            observableMovies.addAll(filterMovies(allMovies, searchField.getText(), (Genre) genreComboBox.getValue()));
         });
 
 
@@ -76,7 +83,8 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> sortMovies(List<Movie> movies,boolean ascending){
-        Collections.sort(movies);
+        if (ascending) Collections.sort(movies);
+        else movies.sort(Comparator.reverseOrder());
         return movies;
     }
 }
