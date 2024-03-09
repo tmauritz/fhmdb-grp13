@@ -23,15 +23,15 @@ public class HomeController implements Initializable {
     public TextField searchField;
 
     @FXML
-    public JFXListView movieListView;
+    public JFXListView<Movie> movieListView;
 
     @FXML
-    public JFXComboBox genreComboBox;
+    public JFXComboBox<String> genreComboBox;
 
     @FXML
     public JFXButton sortBtn;
 
-    private List<Movie> allMovies = Movie.initializeMovies();
+    private final List<Movie> allMovies = Movie.initializeMovies();
     private Map<String, Genre> genreMap;
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
@@ -44,26 +44,23 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        //add genre filter items with genreComboBox.getItems().addAll(...)
+        //add genre filter items
         genreComboBox.setPromptText("Filter by Genre");
         genreMap = new LinkedHashMap<>();
         //translate genre into capitalized Strings for GUI
-        Arrays.stream(Genre.values()).forEach(genre -> {
-            String key = genre.toString().substring(0, 1).toUpperCase() + genre.toString().substring(1).toLowerCase();
-            genreMap.put(key, genre);
-        });
+        Arrays.stream(Genre.values())
+                .forEach(genre -> {
+                    String key = genre.toString().substring(0, 1).toUpperCase() + genre.toString().substring(1).toLowerCase();
+                    genreMap.put(key, genre);
+                });
 
         ObservableList<String> genreObservableList = FXCollections.observableArrayList(genreMap.keySet());
         genreObservableList.removeAll("all");
         genreComboBox.setItems(genreObservableList);
 
-
-        // TODO add event handlers to buttons and call the regarding methods
-        // either set event handlers in the fxml file (onAction) or add them here
-
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
+            if (sortBtn.getText().equals("Sort (asc)")) {
                 // TODO sort observableMovies ascending
                 sortMovies(observableMovies, false);
                 sortBtn.setText("Sort (desc)");
@@ -77,29 +74,31 @@ public class HomeController implements Initializable {
         searchBtn.setOnAction(actionEvent -> setupSearch());
 
         searchField.setOnAction(actionEvent -> setupSearch());
-
-
     }
 
-    private void setupSearch(){
+    private void setupSearch() {
         observableMovies.clear();
-        Genre searchGenre = genreMap.getOrDefault((String) genreComboBox.getValue(), Genre.ALL);
-        observableMovies.addAll(filterMovies(allMovies, searchField.getText(),searchGenre));
+        Genre searchGenre = genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL);
+        observableMovies.addAll(filterMovies(allMovies, searchField.getText(), searchGenre));
     }
 
-    public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre){
+    public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre) {
         List<Movie> filteredMovies = movies;
         query = query.trim().replaceAll("\\s{2,}", " ").toLowerCase();
-        if(movies == null || genre == null) throw new IllegalArgumentException();
-        if(genre != Genre.ALL) filteredMovies = filteredMovies.stream().filter(movie -> movie.getGenres().contains(genre)).toList();
-        if(!query.isBlank()){
+        if (movies == null || genre == null) throw new IllegalArgumentException();
+        if (genre != Genre.ALL) filteredMovies = filteredMovies.stream()
+                .filter(movie -> movie.getGenres().contains(genre))
+                .toList();
+        if (!query.isBlank()) {
             String finalQuery = query;
-            filteredMovies = filteredMovies.stream().filter(movie -> movie.getTitle().toLowerCase().contains(finalQuery) || movie.getDescription().toLowerCase().contains(finalQuery)).toList();
+            filteredMovies = filteredMovies.stream()
+                    .filter(movie -> movie.getTitle().toLowerCase().contains(finalQuery) || movie.getDescription().toLowerCase().contains(finalQuery))
+                    .toList();
         }
         return filteredMovies;
     }
 
-    public List<Movie> sortMovies(List<Movie> movies,boolean ascending){
+    public List<Movie> sortMovies(List<Movie> movies, boolean ascending) {
         if (ascending) Collections.sort(movies);
         else movies.sort(Comparator.reverseOrder());
         return movies;

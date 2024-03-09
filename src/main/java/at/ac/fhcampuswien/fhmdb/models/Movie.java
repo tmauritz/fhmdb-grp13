@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Movie implements Comparable<Movie>{
-    private String title;
-    private String description;
-    private List<Genre> genres;
+    private final String title;
+    private final String description;
+    private final List<Genre> genres;
 
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
