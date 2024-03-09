@@ -31,7 +31,8 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton sortBtn;
 
-    public List<Movie> allMovies = Movie.initializeMovies();
+    private List<Movie> allMovies = Movie.initializeMovies();
+    private Map<String, Genre> genreMap;
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
@@ -43,10 +44,19 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        // TODO add genre filter items with genreComboBox.getItems().addAll(...)
+        //add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
-        ObservableList<Genre> genreObservableList = FXCollections.observableArrayList(Genre.values());
+        genreMap = new LinkedHashMap<>();
+        //translate genre into capitalized Strings for GUI
+        Arrays.stream(Genre.values()).forEach(genre -> {
+            String key = genre.toString().substring(0, 1).toUpperCase() + genre.toString().substring(1).toLowerCase();
+            genreMap.put(key, genre);
+        });
+
+        ObservableList<String> genreObservableList = FXCollections.observableArrayList(genreMap.keySet());
+        genreObservableList.removeAll("all");
         genreComboBox.setItems(genreObservableList);
+
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
@@ -55,16 +65,19 @@ public class HomeController implements Initializable {
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)")) {
                 // TODO sort observableMovies ascending
+                sortMovies(observableMovies, false);
                 sortBtn.setText("Sort (desc)");
             } else {
                 // TODO sort observableMovies descending
+                sortMovies(observableMovies, true);
                 sortBtn.setText("Sort (asc)");
             }
         });
 
         searchBtn.setOnAction(actionEvent -> {
             observableMovies.clear();
-            observableMovies.addAll(filterMovies(allMovies, searchField.getText(), (Genre) genreComboBox.getValue()));
+            Genre searchGenre = genreMap.getOrDefault((String) genreComboBox.getValue(), Genre.ALL);
+            observableMovies.addAll(filterMovies(allMovies, searchField.getText(),searchGenre));
         });
 
 

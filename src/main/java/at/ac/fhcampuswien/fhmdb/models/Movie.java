@@ -7,7 +7,6 @@ import java.util.List;
 public class Movie implements Comparable<Movie>{
     private String title;
     private String description;
-    // TODO add more properties here
     private List<Genre> genres;
 
     public Movie(String title, String description, List<Genre> genres) {
