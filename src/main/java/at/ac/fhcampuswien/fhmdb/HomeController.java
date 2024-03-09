@@ -74,23 +74,27 @@ public class HomeController implements Initializable {
             }
         });
 
-        searchBtn.setOnAction(actionEvent -> {
-            observableMovies.clear();
-            Genre searchGenre = genreMap.getOrDefault((String) genreComboBox.getValue(), Genre.ALL);
-            observableMovies.addAll(filterMovies(allMovies, searchField.getText(),searchGenre));
-        });
+        searchBtn.setOnAction(actionEvent -> setupSearch());
+
+        searchField.setOnAction(actionEvent -> setupSearch());
 
 
     }
 
+    private void setupSearch(){
+        observableMovies.clear();
+        Genre searchGenre = genreMap.getOrDefault((String) genreComboBox.getValue(), Genre.ALL);
+        observableMovies.addAll(filterMovies(allMovies, searchField.getText(),searchGenre));
+    }
+
     public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre){
         List<Movie> filteredMovies = movies;
-        query = query.trim().replaceAll("\\s{2,}", " ");
-        if(movies == null || query == null || genre == null) throw new IllegalArgumentException();
+        query = query.trim().replaceAll("\\s{2,}", " ").toLowerCase();
+        if(movies == null || genre == null) throw new IllegalArgumentException();
         if(genre != Genre.ALL) filteredMovies = filteredMovies.stream().filter(movie -> movie.getGenres().contains(genre)).toList();
         if(!query.isBlank()){
             String finalQuery = query;
-            filteredMovies = filteredMovies.stream().filter(movie -> movie.getTitle().contains(finalQuery) || movie.getDescription().contains(finalQuery)).toList();
+            filteredMovies = filteredMovies.stream().filter(movie -> movie.getTitle().toLowerCase().contains(finalQuery) || movie.getDescription().toLowerCase().contains(finalQuery)).toList();
         }
         return filteredMovies;
     }
