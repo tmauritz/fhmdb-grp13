@@ -98,9 +98,8 @@ public class HomeController implements Initializable {
         return filteredMovies;
     }
 
-    public List<Movie> sortMovies(List<Movie> movies, boolean ascending) {
+    public void sortMovies(List<Movie> movies, boolean ascending) {
         if (ascending) Collections.sort(movies);
         else movies.sort(Comparator.reverseOrder());
-        return movies;
     }
 }

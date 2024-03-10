@@ -251,10 +251,10 @@ public class HomeControllerTest {
         Movie movie2 = new Movie("Chrono Paradox", "Chrono Paradox: A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
         Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
 
-        List<Movie> allTestMovies = new ArrayList<>();
-        allTestMovies.add(movie1);
-        allTestMovies.add(movie2);
-        allTestMovies.add(movie3);
+        List<Movie> sortedMovies = new ArrayList<>();
+        sortedMovies.add(movie1);
+        sortedMovies.add(movie2);
+        sortedMovies.add(movie3);
 
         List<Movie> expectedMovies = new ArrayList<>();
         expectedMovies.add(movie2);
@@ -262,10 +262,10 @@ public class HomeControllerTest {
         expectedMovies.add(movie3);
 
         //WHEN
-        List<Movie> resultMovie = homeController.sortMovies(allTestMovies, true);
+        homeController.sortMovies(sortedMovies, true);
 
         //THEN
-        assertEquals(resultMovie, expectedMovies);
+        assertEquals(sortedMovies, expectedMovies);
     }
     @Test
     public void sort_movies_descending_by_title(){
@@ -275,10 +275,10 @@ public class HomeControllerTest {
         Movie movie2 = new Movie("Chrono Paradox", "Chrono Paradox: A brilliant physicist accidentally creates a time-traveling device, leading to a series of unforeseen consequences. As he attempts to fix the timeline, he becomes entangled in a web of paradoxes that challenge the very nature of cause and effect.", new ArrayList<>(Arrays.asList(Genre.SCIENCE_FICTION, Genre.ADVENTURE)));
         Movie movie3 = new Movie("Whispers in the Dark", "A reclusive writer starts receiving mysterious messages through an antique typewriter that predict future events. As the predictions become increasingly dire, she must confront the source of the messages and unravel a centuries-old mystery.", new ArrayList<>(Arrays.asList(Genre.MYSTERY, Genre.DRAMA)));
 
-        List<Movie> allTestMovies = new ArrayList<>();
-        allTestMovies.add(movie1);
-        allTestMovies.add(movie2);
-        allTestMovies.add(movie3);
+        List<Movie> sortedMovies = new ArrayList<>();
+        sortedMovies.add(movie1);
+        sortedMovies.add(movie2);
+        sortedMovies.add(movie3);
 
         List<Movie> expectedMovies = new ArrayList<>();
         expectedMovies.add(movie3);
@@ -286,10 +286,10 @@ public class HomeControllerTest {
         expectedMovies.add(movie2);
 
         //WHEN
-        List<Movie> resultMovie = homeController.sortMovies(allTestMovies, false);
+        homeController.sortMovies(sortedMovies, false);
 
         //THEN
-        assertEquals(resultMovie, expectedMovies);
+        assertEquals(sortedMovies, expectedMovies);
     }
 
     /* --------- Null Pointer Tests--------*/
