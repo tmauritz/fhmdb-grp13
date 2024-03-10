@@ -41,6 +41,7 @@ public class HomeController implements Initializable {
         observableMovies.addAll(allMovies);         // add dummy data to observable list
 
         // initialize UI stuff
+        sortMovies(observableMovies,true);
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
