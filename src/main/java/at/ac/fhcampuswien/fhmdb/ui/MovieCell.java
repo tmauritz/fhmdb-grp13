@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -8,6 +9,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+import java.util.List;
 
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
@@ -24,11 +28,18 @@ public class MovieCell extends ListCell<Movie> {
         } else {
             this.getStyleClass().add("movie-cell");
             title.setText(movie.getTitle());
-            detail.setText(
+            StringBuilder detailText = new StringBuilder(
                     movie.getDescription() != null
-                            ? movie.getDescription()
-                            : "No description available"
+                    ? movie.getDescription()
+                    : "No description available"
             );
+            detailText.append(System.lineSeparator()).append(System.lineSeparator());
+            List<Genre> genres = movie.getGenres();
+            for (int i = 1; i <= genres.size(); i++){
+                detailText.append(genres.get(i-1).toString().replaceAll("_", " "));
+                if(i != genres.size()) detailText.append(", ");
+            }
+            detail.setText(detailText.toString());
 
 
             // color scheme
@@ -37,7 +48,7 @@ public class MovieCell extends ListCell<Movie> {
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
             // layout
-            title.fontProperty().set(title.getFont().font(20));
+            title.fontProperty().set(Font.font(20));
             detail.setMaxWidth(this.getScene().getWidth() - 30);
             detail.setWrapText(true);
             layout.setPadding(new Insets(10));

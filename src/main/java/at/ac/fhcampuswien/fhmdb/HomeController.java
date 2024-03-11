@@ -51,8 +51,18 @@ public class HomeController implements Initializable {
         //translate genre into capitalized Strings for GUI
         Arrays.stream(Genre.values())
                 .forEach(genre -> {
-                    String key = genre.toString().substring(0, 1).toUpperCase() + genre.toString().substring(1).toLowerCase();
-                    genreMap.put(key, genre);
+                    StringBuilder result = new StringBuilder();
+                    String[] words = genre.toString().toLowerCase().split("_");
+                    for (String word : words) {
+                        if (!word.isEmpty()) {
+                            result.append(Character.toUpperCase(word.charAt(0))); // Capitalize first letter
+                            if (word.length() > 1) {
+                                result.append(word.substring(1)); // Append rest of the word
+                            }
+                        }
+                        result.append(" ");
+                    }
+                    genreMap.put(result.toString().trim(), genre);
                 });
 
         ObservableList<String> genreObservableList = FXCollections.observableArrayList(genreMap.keySet());
