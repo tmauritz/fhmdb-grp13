@@ -38,3 +38,15 @@
     -fx-background-color: white;
     -fx-text-fill: #ffffff;
 }
+
+#resetBtn:disabled {
+    -fx-background-color: grey;
+}
+
+#resetBtn {
+
+}
+
+.button:hover {
+    -fx-background-color: #7cd4dd;
+ }

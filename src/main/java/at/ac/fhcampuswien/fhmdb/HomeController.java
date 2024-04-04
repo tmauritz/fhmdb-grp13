@@ -31,6 +31,9 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton sortBtn;
 
+    @FXML
+    public JFXButton resetBtn;
+
     private final List<Movie> allMovies = Movie.initializeMovies();
     private Map<String, Genre> genreMap;
 
@@ -70,6 +73,7 @@ public class HomeController implements Initializable {
         genreComboBox.setItems(genreObservableList);
 
         // Sort button example:
+        sortBtn.setPrefWidth(80);
         sortBtn.setOnAction(actionEvent -> {
             if (sortBtn.getText().equals("Sort (asc)")) {
                 // sort observableMovies ascending
@@ -82,15 +86,23 @@ public class HomeController implements Initializable {
             }
         });
 
-        searchBtn.setOnAction(actionEvent -> setupSearch());
-
-        searchField.setOnAction(actionEvent -> setupSearch());
+        searchBtn.setOnAction(actionEvent -> setupForFilter());
+        searchField.setOnAction(actionEvent -> setupForFilter());
+        resetBtn.setOnAction(actionEvent -> resetFilter());
     }
 
-    private void setupSearch() {
+    private void setupForFilter() {
         observableMovies.clear();
         Genre searchGenre = genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL);
         observableMovies.addAll(filterMovies(allMovies, searchField.getText(), searchGenre));
+        sortMovies(observableMovies, sortBtn.getText().equals("Sort (asc)"));
+        resetBtn.setDisable(searchField.getText().isBlank() && searchGenre.equals(Genre.ALL));
+    }
+
+    public void resetFilter(){
+        searchField.clear();
+        genreComboBox.setValue("Filter by Genre");
+        setupForFilter();
     }
 
     public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre) {
