@@ -38,6 +38,14 @@
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor></JFXComboBox>
+         <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor></JFXComboBox>
+         <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor></JFXComboBox>
          <JFXButton fx:id="searchBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Filter">
             <cursor>
                <Cursor fx:constant="HAND" />

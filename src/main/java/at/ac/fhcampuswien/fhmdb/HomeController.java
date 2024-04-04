@@ -29,6 +29,12 @@ public class HomeController implements Initializable {
     public JFXComboBox<String> genreComboBox;
 
     @FXML
+    public JFXComboBox<String> releaseYearComboBox;
+
+    @FXML
+    public JFXComboBox<String> ratingComboBox;
+
+    @FXML
     public JFXButton sortBtn;
 
     @FXML
@@ -50,12 +56,14 @@ public class HomeController implements Initializable {
 
         //add genre filter items
         genreComboBox.setPromptText("Filter by Genre");
+        releaseYearComboBox.setPromptText("Filter by Release Year");
+        ratingComboBox.setPromptText("Filter by Rating");
         genreMap = new LinkedHashMap<>();
         //translate genre into capitalized Strings for GUI
         Arrays.stream(Genre.values())
                 .forEach(genre -> {
                     StringBuilder result = new StringBuilder();
-                    String[] words = genre.toString().toLowerCase().split("_");
+                        String[] words = genre.toString().toLowerCase().split("_");
                     for (String word : words) {
                         if (!word.isEmpty()) {
                             result.append(Character.toUpperCase(word.charAt(0))); // Capitalize first letter
@@ -101,7 +109,7 @@ public class HomeController implements Initializable {
 
     public void resetFilter(){
         searchField.clear();
-        genreComboBox.setValue("Filter by Genre");
+        genreComboBox.setValue(null);
         setupForFilter();
     }
 
