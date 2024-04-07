@@ -47,7 +47,14 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+
+        MovieAPI api = new MovieAPI();
+
+        try {
+            observableMovies.addAll(api.loadMovies());         // add data to observable list
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // initialize UI stuff
         sortMovies(observableMovies,true);
