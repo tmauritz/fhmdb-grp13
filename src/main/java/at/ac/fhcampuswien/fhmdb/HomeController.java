@@ -194,6 +194,8 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
-        return new ArrayList<>();
+        return movies.stream()
+                .filter(movie -> movie.getReleaseYear() > startYear && movie.getReleaseYear() < endYear)
+                .toList();
     }
 }
