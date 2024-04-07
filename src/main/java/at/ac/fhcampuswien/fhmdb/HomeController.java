@@ -49,7 +49,9 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         api = new MovieAPI();
-        observableMovies.addAll(api.loadMovies());         // add data to observable list
+        List<Movie> loadedMovies = api.loadMovies();
+        observableMovies.addAll(loadedMovies);         // add data to observable list
+        updateFilterOptions(loadedMovies);
 
         // initialize UI stuff
         sortMovies(observableMovies,true);
@@ -82,6 +84,12 @@ public class HomeController implements Initializable {
         genreObservableList.removeAll("all");
         genreComboBox.setItems(genreObservableList);
 
+        ObservableList<String> ratingObservableList = FXCollections.observableArrayList();
+        for (int i = 1; i <= 10; i++) {
+            ratingObservableList.add(String.valueOf(i));
+        }
+        ratingComboBox.setItems(ratingObservableList);
+
         // Sort button example:
         sortBtn.setPrefWidth(80);
         sortBtn.setOnAction(actionEvent -> {
@@ -104,14 +112,27 @@ public class HomeController implements Initializable {
     private void setupForFilter() {
         observableMovies.clear();
         Genre searchGenre = genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL);
-        observableMovies.addAll(filterMovies(allMovies, searchField.getText(), searchGenre));
+        double rating = Double.parseDouble(ratingComboBox.getValue() == null ? "0" : ratingComboBox.getValue());
+        int releaseYear = Integer.parseInt(releaseYearComboBox.getValue() == null ? "-1" : releaseYearComboBox.getValue());
+        observableMovies.addAll(filterMovies(searchField.getText(), searchGenre, releaseYear, rating));
         sortMovies(observableMovies, sortBtn.getText().equals("Sort (asc)"));
-        resetBtn.setDisable(searchField.getText().isBlank() && searchGenre.equals(Genre.ALL));
+        resetBtn.setDisable(searchField.getText().isBlank() && searchGenre.equals(Genre.ALL) && releaseYearComboBox.getValue() == null && ratingComboBox.getValue() == null);
+    }
+
+    public void updateFilterOptions(List<Movie> movies) {
+        ObservableList<String> releaseYear = FXCollections.observableArrayList();
+        for (Movie movie: movies) {
+            if (!releaseYear.contains(String.valueOf(movie.getReleaseYear()))) releaseYear.add(String.valueOf(movie.getReleaseYear()));
+        }
+        Collections.sort(releaseYear);
+        releaseYearComboBox.setItems(releaseYear);
     }
 
     public void resetFilter(){
         searchField.clear();
-        genreComboBox.setValue(null);
+        genreComboBox.getSelectionModel().clearSelection();
+        ratingComboBox.getSelectionModel().clearSelection();
+        releaseYearComboBox.getSelectionModel().clearSelection();
         setupForFilter();
     }
 
@@ -132,7 +153,9 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> filterMovies(String query, Genre genre, int releaseYear, double rating) {
-        return api.loadMovies(query, genre, releaseYear, rating);
+        List<Movie> filteredMovies = api.loadMovies(query, genre, releaseYear, rating);
+        updateFilterOptions(filteredMovies);
+        return filteredMovies;
     }
 
     public void sortMovies(List<Movie> movies, boolean ascending) {

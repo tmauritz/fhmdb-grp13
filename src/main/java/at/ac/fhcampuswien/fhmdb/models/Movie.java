@@ -9,7 +9,7 @@ public class Movie implements Comparable<Movie>{
     private final String description;
     private final List<Genre> genres;
     private final int releaseYear;
-    private final double ratingFrom;
+    private final double rating;
     private final String id;
     private final List<String> mainCast;
     private final int lengthInMinutes;
@@ -17,12 +17,12 @@ public class Movie implements Comparable<Movie>{
     private final List<String> writers;
     private final String url;
 
-    public Movie(String id, String title, List<Genre> genres, int releaseYear, String description, String url,  int lengthInMinutes, List<String> directors, List<String> writers, List<String> mainCast, double ratingFrom) {
+    public Movie(String id, String title, List<Genre> genres, int releaseYear, String description, String url,  int lengthInMinutes, List<String> directors, List<String> writers, List<String> mainCast, double rating) {
         this.title = title;
         this.description = description;
         this.genres = genres;
         this.releaseYear = releaseYear;
-        this.ratingFrom = ratingFrom;
+        this.rating = rating;
         this.id = id;
         this.mainCast = mainCast;
         this.lengthInMinutes = lengthInMinutes;
@@ -47,8 +47,8 @@ public class Movie implements Comparable<Movie>{
         return releaseYear;
     }
 
-    public double getRatingFrom() {
-        return ratingFrom;
+    public double getRating() {
+        return rating;
     }
 
     public String getId() {

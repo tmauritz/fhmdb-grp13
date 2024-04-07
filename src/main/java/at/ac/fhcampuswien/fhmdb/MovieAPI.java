@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.models.Genre;
-import at.ac.fhcampuswien.fhmdb.models.Job;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class MovieAPI {
      */
     public List<Movie> loadMovies() {
         Request request = new Request.Builder()
-                .url("https://jobs.postmanatwork.com/jobs")
+                .url("http://prog2.fh-campuswien.ac.at/movies")
                 .header("User-Agent", "MovieAPI.java")
                 .build();
 
@@ -42,14 +41,13 @@ public class MovieAPI {
      * @return Movies matching the search criteria
      */
     public List<Movie> loadMovies(String query, Genre genre, int releaseYear, double rating) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("https://jobs.postmanatwork.com/jobs")).newBuilder();
-        urlBuilder/*
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://prog2.fh-campuswien.ac.at/movies")).newBuilder();
+        urlBuilder
                 .addQueryParameter("query", query)
-                .addQueryParameter("genre", genre.toString())
-                .addQueryParameter("releaseYear", Integer.toString(releaseYear))
-                .addQueryParameter("rating", Double.toString(rating))
-                */
-                .addQueryParameter("q", query);
+                .addQueryParameter("ratingFrom", Double.toString(rating));
+
+        if (releaseYear != -1) urlBuilder.addQueryParameter("releaseYear", Integer.toString(releaseYear));
+        if (genre != Genre.ALL) urlBuilder.addQueryParameter("genre", genre.toString());
 
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
@@ -66,9 +64,7 @@ public class MovieAPI {
 
             if (response.body() != null) {
                 Gson gson = new Gson();
-
-                List<Job> jobs = Arrays.asList(gson.fromJson(response.body().string(), Job[].class));
-                System.out.println("debuuggg");
+                return Arrays.asList(gson.fromJson(response.body().string(), Movie[].class));
             }
 
         } catch (Exception e) {

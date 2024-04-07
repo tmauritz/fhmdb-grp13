@@ -34,6 +34,7 @@ public class MovieCell extends ListCell<Movie> {
                     : "No description available"
             );
             detailText.append(System.lineSeparator()).append(System.lineSeparator());
+            detailText.append("Release: ").append(movie.getReleaseYear()).append("  |  ★ ").append(movie.getRating()).append(System.lineSeparator());
             List<Genre> genres = movie.getGenres();
             for (int i = 1; i <= genres.size(); i++){
                 detailText.append(genres.get(i-1).toString().replaceAll("_", " "));
