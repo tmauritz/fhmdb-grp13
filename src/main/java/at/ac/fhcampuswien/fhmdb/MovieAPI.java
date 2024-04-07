@@ -65,11 +65,9 @@ public class MovieAPI {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
             if (response.body() != null) {
-                String json = response.body().string();
-                System.out.println(json);
                 Gson gson = new Gson();
 
-                List<Job> jobs = Arrays.asList(gson.fromJson(json, Job[].class));
+                List<Job> jobs = Arrays.asList(gson.fromJson(response.body().string(), Job[].class));
                 System.out.println("debuuggg");
             }
 

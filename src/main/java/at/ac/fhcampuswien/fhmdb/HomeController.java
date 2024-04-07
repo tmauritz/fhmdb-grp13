@@ -44,17 +44,12 @@ public class HomeController implements Initializable {
     private Map<String, Genre> genreMap;
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    private MovieAPI api;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        MovieAPI api = new MovieAPI();
-
-        try {
-            observableMovies.addAll(api.loadMovies("Director",Genre.ALL,0 ,0));         // add data to observable list
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        api = new MovieAPI();
+        observableMovies.addAll(api.loadMovies());         // add data to observable list
 
         // initialize UI stuff
         sortMovies(observableMovies,true);
@@ -134,6 +129,10 @@ public class HomeController implements Initializable {
                     .toList();
         }
         return filteredMovies;
+    }
+
+    public List<Movie> filterMovies(String query, Genre genre, int releaseYear, double rating) {
+        return api.loadMovies(query, genre, releaseYear, rating);
     }
 
     public void sortMovies(List<Movie> movies, boolean ascending) {
