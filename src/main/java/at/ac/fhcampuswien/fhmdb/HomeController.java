@@ -51,7 +51,7 @@ public class HomeController implements Initializable {
         MovieAPI api = new MovieAPI();
 
         try {
-            observableMovies.addAll(api.loadMovies());         // add data to observable list
+            observableMovies.addAll(api.loadMovies("Director",Genre.ALL,0 ,0));         // add data to observable list
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
