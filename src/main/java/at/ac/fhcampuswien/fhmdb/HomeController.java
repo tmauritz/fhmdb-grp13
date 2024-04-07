@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -52,6 +54,7 @@ public class HomeController implements Initializable {
         List<Movie> loadedMovies = api.loadMovies();
         observableMovies.addAll(loadedMovies);         // add data to observable list
         updateFilterOptions(loadedMovies);
+        String actor = getMostPopularActor(loadedMovies);
 
         // initialize UI stuff
         sortMovies(observableMovies,true);
@@ -164,16 +167,30 @@ public class HomeController implements Initializable {
     }
 
     public String getMostPopularActor(List<Movie> movies) {
-
-        return "";
+        if (movies.isEmpty())  return "";
+        return movies.stream()
+                .map(Movie::getMainCast)
+                .flatMap(Collection::stream)
+                .sorted()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey)
+                .orElse(null);
     }
 
     public int getLongestMovieTitle(List<Movie> movies) {
-        return 0;
+        if(movies.isEmpty())  return 0;
+        Movie movieLength = movies.stream()
+                .max(Comparator.comparingInt(e -> e.getTitle().length()))
+                .orElse(null);
+        return movieLength.getTitle().length();
     }
 
     public long countMoviesFrom(List<Movie> movies, String director){
-        return 0;
+        if(movies.isEmpty()) return 0;
+        return movies.stream()
+                .filter(e -> e.getDirectors().contains(director))
+                .count();
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
