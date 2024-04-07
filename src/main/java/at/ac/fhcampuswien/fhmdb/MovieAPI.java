@@ -11,7 +11,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,20 +38,22 @@ public class MovieAPI {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-            if(response.body()!=null)System.out.println(response.body().string());
+            if(response.body()!=null) {
+                String json = response.body().string();
+                System.out.println(json);
+                Gson gson = new Gson();
 
-            /*
-            Gson gson = new Gson();
+                Type type = new TypeToken<List<Job>>() {
+                }.getType();
+
+                List<Job> jobs = gson.fromJson(json, type);
+                System.out.println("debuuggg");
+            }
             // Deserialization
-           Type collectionType = new TypeToken<ArrayList<Job>>(){}.getType();
             // Note: For older Gson versions it is necessary to use `collectionType.getType()` as argument below,
             // this is however not type-safe and care must be taken to specify the correct type for the local variable
-            ArrayList<Job> jobs = gson.fromJson(response.body().charStream(), collectionType);
-
             //Job[] jobs = gson.fromJson(response.body().string(), Job[].class);
 
-            System.out.println("debuuggg");
-            */
         }
 
 
