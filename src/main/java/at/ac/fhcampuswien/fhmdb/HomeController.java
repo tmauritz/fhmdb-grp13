@@ -54,7 +54,6 @@ public class HomeController implements Initializable {
         List<Movie> loadedMovies = api.loadMovies();
         observableMovies.addAll(loadedMovies);         // add data to observable list
         updateFilterOptions(loadedMovies);
-        String actor = getMostPopularActor(loadedMovies);
 
         // initialize UI stuff
         sortMovies(observableMovies,true);
@@ -171,9 +170,9 @@ public class HomeController implements Initializable {
         return movies.stream()
                 .map(Movie::getMainCast)
                 .flatMap(Collection::stream)
-                .sorted()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
                 .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey)
                 .orElse(null);
     }
