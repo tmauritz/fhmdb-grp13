@@ -868,4 +868,66 @@ public class HomeControllerTest {
         //THEN
         assertTrue(resultMovie.isEmpty());
     }
+    /* --------- Stream Filter --------*/
+    @Test
+    public void get_Actor_with_most_movies(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie(
+                "001",
+                "Eternal Echoes",
+                Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.MYSTERY),
+                2023,
+                "In a small coastal town, a young woman discovers a series of love letters hidden in an antique book, sparking a journey to unravel a decades-old mystery and find the true meaning of love.",
+                "example.com/eternal-echoes",
+                130,
+                List.of("Ava Smith"),
+                Arrays.asList("Ryan Johnson", "Emily Greene"),
+                Arrays.asList("Lily Collins", "Ryan Gosling", "Helen Mirren"),
+                8.2
+        );
+
+        Movie movie2 = new Movie(
+                "002",
+                "Shadowed Paths",
+                Arrays.asList(Genre.THRILLER, Genre.MYSTERY, Genre.CRIME),
+                2024,
+                "A seasoned detective is drawn into a web of intrigue and danger when he investigates a series of seemingly unrelated crimes, only to discover they are all connected by a dark secret buried in the past.",
+                "example.com/shadowed-paths",
+                120,
+                List.of("David Fincher"),
+                Arrays.asList("Sarah Johnson", "Michael Thompson"),
+                Arrays.asList("Jake Gyllenhaal", "Charlize Theron", "Anthony Hopkins"),
+                8.6
+        );
+
+        Movie movie3 = new Movie(
+                "003",
+                "Echoes of War",
+                Arrays.asList(Genre.ACTION, Genre.DRAMA, Genre.HISTORY),
+                2022,
+                "Set during World War II, a group of soldiers must navigate the brutal realities of combat while grappling with their own inner demons and the moral complexities of war.",
+                "example.com/echoes-of-war",
+                150,
+                List.of("Christopher Nolan"),
+                Arrays.asList("Matthew Carter", "Emma Thompson"),
+                Arrays.asList("Tom Hanks", "Ryan Gosling", "Alicia Vikander"),
+                8.9
+        );
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        //WHEN
+        String result = homeController.getMostPopularActor(allTestMovies);
+
+        //THEN
+        assertEquals("Ryan Gosling", result);
+    }
+
+    //No movies
+    //Actor with most movies
+    //Two actors with equal movies
 }

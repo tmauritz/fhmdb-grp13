@@ -162,4 +162,21 @@ public class HomeController implements Initializable {
         if (ascending) Collections.sort(movies);
         else movies.sort(Comparator.reverseOrder());
     }
+
+    public String getMostPopularActor(List<Movie> movies) {
+
+        return "";
+    }
+
+    public int getLongestMovieTitle(List<Movie> movies) {
+        return 0;
+    }
+
+    public long countMoviesFrom(List<Movie> movies, String director){
+        return 0;
+    }
+
+    public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
+        return new ArrayList<>();
+    }
 }
