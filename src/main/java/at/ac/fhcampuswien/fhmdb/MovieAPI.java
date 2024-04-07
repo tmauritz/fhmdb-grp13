@@ -7,6 +7,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,16 +44,9 @@ public class MovieAPI {
                 System.out.println(json);
                 Gson gson = new Gson();
 
-                Type type = new TypeToken<List<Job>>() {
-                }.getType();
-
-                List<Job> jobs = gson.fromJson(json, type);
+                List<Job> jobs = Arrays.asList(gson.fromJson(json, Job[].class));
                 System.out.println("debuuggg");
             }
-            // Deserialization
-            // Note: For older Gson versions it is necessary to use `collectionType.getType()` as argument below,
-            // this is however not type-safe and care must be taken to specify the correct type for the local variable
-            //Job[] jobs = gson.fromJson(response.body().string(), Job[].class);
 
         }
 
@@ -62,6 +56,10 @@ public class MovieAPI {
 
     public List<Movie> loadMovies(String query, Genre genre, int releaseYear, double rating){
         // GET /movies?query=""&genre=""&releaseYear=&rating=
+        Request request = new Request.Builder()
+                .url("https://jobs.postmanatwork.com/jobs")
+                .header("User-Agent", "MovieAPI.java")
+                .build();
 
         return new ArrayList<>();
     }
