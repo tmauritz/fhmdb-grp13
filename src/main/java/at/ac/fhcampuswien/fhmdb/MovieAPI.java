@@ -41,7 +41,7 @@ public class MovieAPI {
      * @return Movies matching the search criteria
      */
     public List<Movie> loadMovies(String query, Genre genre, int releaseYear, double rating) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://prog2.fh-campuswien.ac.at/movies")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("https://prog2.fh-campuswien.ac.at/movies")).newBuilder();
         urlBuilder
                 .addQueryParameter("query", query)
                 .addQueryParameter("ratingFrom", Double.toString(rating));
