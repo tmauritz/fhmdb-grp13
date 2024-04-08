@@ -24,7 +24,7 @@ public class MovieAPI {
      */
     public List<Movie> loadMovies() {
         Request request = new Request.Builder()
-                .url("http://prog2.fh-campuswien.ac.at/movies")
+                .url("https://prog2.fh-campuswien.ac.at/movies")
                 .header("User-Agent", "MovieAPI.java")
                 .build();
 
