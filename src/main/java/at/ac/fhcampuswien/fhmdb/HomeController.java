@@ -166,7 +166,6 @@ public class HomeController implements Initializable {
     }
 
     public String getMostPopularActor(List<Movie> movies) {
-        if (movies.isEmpty())  return "";
         return movies.stream()
                 .map(Movie::getMainCast)
                 .flatMap(Collection::stream)
@@ -174,7 +173,7 @@ public class HomeController implements Initializable {
                 .entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey)
-                .orElse(null);
+                .orElse("");
     }
 
     public int getLongestMovieTitle(List<Movie> movies) {
