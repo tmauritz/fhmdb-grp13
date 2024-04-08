@@ -18,6 +18,13 @@ public class MovieCell extends ListCell<Movie> {
     private final Label detail = new Label();
     private final VBox layout = new VBox(title, detail);
 
+    /**
+     * Handles visual representation of a movie
+     * @param movie The new item for the cell.
+     * @param empty whether or not this cell represents data from the list. If it
+     *        is empty, then it does not represent any domain data, but is a cell
+     *        being used to render an "empty" row.
+     */
     @Override
     protected void updateItem(Movie movie, boolean empty) {
         super.updateItem(movie, empty);

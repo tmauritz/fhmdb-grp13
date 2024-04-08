@@ -14,6 +14,7 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 public class MovieAPI {
+    private final String apiUrl = "https://prog2.fh-campuswien.ac.at/movies";
 
     private final OkHttpClient client = new OkHttpClient();
 
@@ -24,7 +25,7 @@ public class MovieAPI {
      */
     public List<Movie> loadMovies() {
         Request request = new Request.Builder()
-                .url("https://prog2.fh-campuswien.ac.at/movies")
+                .url(apiUrl)
                 .header("User-Agent", "MovieAPI.java")
                 .build();
 
@@ -41,7 +42,7 @@ public class MovieAPI {
      * @return Movies matching the search criteria
      */
     public List<Movie> loadMovies(String query, Genre genre, int releaseYear, double rating) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("https://prog2.fh-campuswien.ac.at/movies")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUrl)).newBuilder();
         urlBuilder
                 .addQueryParameter("query", query)
                 .addQueryParameter("ratingFrom", Double.toString(rating));
@@ -56,6 +57,14 @@ public class MovieAPI {
 
         return getMovies(request);
     }
+
+    /**
+     * Catches response if request invalid
+     * Loads json from server and translates it into Java objects
+     *
+     * @param request http request to server
+     * @return Movie list
+     */
 
     @NotNull
     private List<Movie> getMovies(Request request) {

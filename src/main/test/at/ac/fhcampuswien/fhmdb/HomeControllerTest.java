@@ -1255,7 +1255,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void two_movies_match_the_criteria(){
+    public void two_movies_in_the_selected_year_range(){
         //GIVEN
         HomeController homeController = new HomeController();
         Movie movie1 = new Movie(
@@ -1311,6 +1311,129 @@ public class HomeControllerTest {
 
         //WHEN
         List<Movie> result = homeController.getMoviesBetweenYears(allTestMovies, 2021, 2023);
+
+        //THEN
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void movie_in_exact_year_should_not_be_displayed(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie(
+                "001",
+                "Eternal Echoes",
+                Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.MYSTERY),
+                2021,
+                "In a small coastal town, a young woman discovers a series of love letters hidden in an antique book, sparking a journey to unravel a decades-old mystery and find the true meaning of love.",
+                "example.com/eternal-echoes",
+                130,
+                List.of("Christopher Nolan"),
+                Arrays.asList("Ryan Johnson", "Emily Greene"),
+                Arrays.asList("Lily Collins", "Ryan Gosling", "Helen Mirren"),
+                8.2
+        );
+
+        Movie movie2 = new Movie(
+                "002",
+                "Shadowed Path",
+                Arrays.asList(Genre.THRILLER, Genre.MYSTERY, Genre.CRIME),
+                2024,
+                "A seasoned detective is drawn into a web of intrigue and danger when he investigates a series of seemingly unrelated crimes, only to discover they are all connected by a dark secret buried in the past.",
+                "example.com/shadowed-paths",
+                120,
+                List.of("David Fincher"),
+                Arrays.asList("Sarah Johnson", "Michael Thompson"),
+                Arrays.asList("Jake Gyllenhaal", "Ryan Gosling", "Anthony Hopkins"),
+                8.6
+        );
+
+        Movie movie3 = new Movie(
+                "003",
+                "Echoes of War Part 2",
+                Arrays.asList(Genre.ACTION, Genre.DRAMA, Genre.HISTORY),
+                2022,
+                "Set during World War II, a group of soldiers must navigate the brutal realities of combat while grappling with their own inner demons and the moral complexities of war.",
+                "example.com/echoes-of-war",
+                150,
+                List.of("Christopher Nolan"),
+                Arrays.asList("Matthew Carter", "Emma Thompson"),
+                Arrays.asList("Tom Hanks", "Anthony Hopkins", "Alicia Vikander"),
+                8.9
+        );
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        List<Movie> expected = new ArrayList<>();
+        expected.add(movie3);
+
+        //WHEN
+        List<Movie> result = homeController.getMoviesBetweenYears(allTestMovies, 2021, 2023);
+
+        //THEN
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void swapping_start_and_end_year_does_not_change_result(){
+        //GIVEN
+        HomeController homeController = new HomeController();
+        Movie movie1 = new Movie(
+                "001",
+                "Eternal Echoes",
+                Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.MYSTERY),
+                2022,
+                "In a small coastal town, a young woman discovers a series of love letters hidden in an antique book, sparking a journey to unravel a decades-old mystery and find the true meaning of love.",
+                "example.com/eternal-echoes",
+                130,
+                List.of("Christopher Nolan"),
+                Arrays.asList("Ryan Johnson", "Emily Greene"),
+                Arrays.asList("Lily Collins", "Ryan Gosling", "Helen Mirren"),
+                8.2
+        );
+
+        Movie movie2 = new Movie(
+                "002",
+                "Shadowed Path",
+                Arrays.asList(Genre.THRILLER, Genre.MYSTERY, Genre.CRIME),
+                2024,
+                "A seasoned detective is drawn into a web of intrigue and danger when he investigates a series of seemingly unrelated crimes, only to discover they are all connected by a dark secret buried in the past.",
+                "example.com/shadowed-paths",
+                120,
+                List.of("David Fincher"),
+                Arrays.asList("Sarah Johnson", "Michael Thompson"),
+                Arrays.asList("Jake Gyllenhaal", "Ryan Gosling", "Anthony Hopkins"),
+                8.6
+        );
+
+        Movie movie3 = new Movie(
+                "003",
+                "Echoes of War Part 2",
+                Arrays.asList(Genre.ACTION, Genre.DRAMA, Genre.HISTORY),
+                2022,
+                "Set during World War II, a group of soldiers must navigate the brutal realities of combat while grappling with their own inner demons and the moral complexities of war.",
+                "example.com/echoes-of-war",
+                150,
+                List.of("Christopher Nolan"),
+                Arrays.asList("Matthew Carter", "Emma Thompson"),
+                Arrays.asList("Tom Hanks", "Anthony Hopkins", "Alicia Vikander"),
+                8.9
+        );
+
+        List<Movie> allTestMovies = new ArrayList<>();
+        allTestMovies.add(movie1);
+        allTestMovies.add(movie2);
+        allTestMovies.add(movie3);
+
+        List<Movie> expected = new ArrayList<>();
+        expected.add(movie1);
+        expected.add(movie3);
+
+        //WHEN
+        List<Movie> result = homeController.getMoviesBetweenYears(allTestMovies, 2023, 2021);
 
         //THEN
         assertEquals(expected, result);

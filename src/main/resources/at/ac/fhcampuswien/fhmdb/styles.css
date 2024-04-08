@@ -43,10 +43,6 @@
     -fx-background-color: grey;
 }
 
-#resetBtn {
-
-}
-
 .button:hover {
     -fx-background-color: #7cd4dd;
  }
