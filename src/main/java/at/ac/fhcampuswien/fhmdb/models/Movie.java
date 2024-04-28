@@ -1,7 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Movie implements Comparable<Movie>{
@@ -29,6 +32,20 @@ public class Movie implements Comparable<Movie>{
         this.directors = directors;
         this.writers = writers;
         this.url = url;
+    }
+
+    public Movie(MovieEntity movieEntity){
+        this.title = movieEntity.getTitle();
+        this.description = movieEntity.getDescription();
+        this.releaseYear = movieEntity.getReleaseYear();
+        this.rating = movieEntity.getRating();
+        this.id = movieEntity.getApiId();
+        this.lengthInMinutes = movieEntity.getLengthInMinutes();
+        this.url = movieEntity.getImgUrl();
+        this.genres = genreStringToList(movieEntity.getGenres());
+        this.mainCast = new LinkedList<>();
+        this.directors = new LinkedList<>();
+        this.writers = new LinkedList<>();
     }
 
     public String getTitle() {
@@ -83,5 +100,16 @@ public class Movie implements Comparable<Movie>{
     @Override
     public int compareTo(Movie o){
         return this.title.compareTo(o.getTitle());
+    }
+
+    private List<Genre> genreStringToList(String genreString){
+        String[] genreArray = genreString.split(", ");
+        List<Genre> genreList = new LinkedList<>();
+
+        for(String genre: genreArray){
+            genreList.add(Genre.valueOf(genre));
+        }
+
+        return genreList;
     }
 }

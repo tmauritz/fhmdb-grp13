@@ -14,18 +14,20 @@ public class DatabaseManager {
     public final static String password = "passwort";
 
     public static ConnectionSource connectionSource;
-    Dao<MovieEntity, Integer> movieDao;
+    private Dao<MovieEntity, Integer> movieDao;
+    private Dao<WatchlistMovieEntity, Integer> watchlistDao;
     private static DatabaseManager databaseManager;
 
     private DatabaseManager() {
-       //TODO: Move to correct spot
-       try{
-           createConnection();
-           movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
-           createTables();
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
+        //TODO: Move to correct spot
+        try {
+            createConnection();
+            movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
+            watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
+            createTables();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     /*public void testDatabase() throws SQLException {
@@ -33,16 +35,26 @@ public class DatabaseManager {
        movieDao.create(movie);
     }*/
 
-    public static DatabaseManager getDatabaseManager(){
-       if (databaseManager == null) databaseManager = new DatabaseManager();
-       return databaseManager;
+    public static DatabaseManager getDatabaseManager() {
+        if (databaseManager == null) databaseManager = new DatabaseManager();
+        return databaseManager;
     }
-    private static void createTables() throws SQLException{
+
+    public Dao<MovieEntity, Integer> getMovieDao() {
+        return movieDao;
+    }
+
+    public Dao<WatchlistMovieEntity, Integer> getWatchlistDao() {
+        return watchlistDao;
+    }
+
+    private static void createTables() throws SQLException {
         TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
     }
 
     private static void createConnection() throws SQLException {
-        connectionSource = new JdbcConnectionSource(DB_URL,username,password);
+        connectionSource = new JdbcConnectionSource(DB_URL, username, password);
     }
 
 }
