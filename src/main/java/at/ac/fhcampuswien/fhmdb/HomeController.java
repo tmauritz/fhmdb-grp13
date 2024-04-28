@@ -100,6 +100,7 @@ public class HomeController implements Initializable {
         genreComboBox.setItems(genreObservableList);
 
         ObservableList<String> ratingObservableList = FXCollections.observableArrayList();
+        ratingObservableList.add("All");
         for (int i = 1; i <= 10; i++) {
             ratingObservableList.add(String.valueOf(i));
         }
@@ -119,6 +120,9 @@ public class HomeController implements Initializable {
             }
         });
 
+        //ratingComboBox.setOnAction(actionEvent -> executeFilter());
+        //releaseYearComboBox.setOnAction(actionEvent -> executeFilter());
+        //genreComboBox.setOnAction(actionEvent -> executeFilter());
         searchBtn.setOnAction(actionEvent -> executeFilter());
         searchField.setOnAction(actionEvent -> executeFilter());
         resetBtn.setOnAction(actionEvent -> resetFilter());
@@ -135,8 +139,8 @@ public class HomeController implements Initializable {
         observableMovies.clear();
 
         Genre searchGenre = genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL);
-        double rating = Double.parseDouble(ratingComboBox.getValue() == null ? "0" : ratingComboBox.getValue());
-        int releaseYear = Integer.parseInt(releaseYearComboBox.getValue() == null ? "-1" : releaseYearComboBox.getValue());
+        double rating = Double.parseDouble(ratingComboBox.getValue() == null || ratingComboBox.getValue().equals("All") ? "0" : ratingComboBox.getValue());
+        int releaseYear = Integer.parseInt(releaseYearComboBox.getValue() == null || releaseYearComboBox.getValue().equals("All") ? "-1" : releaseYearComboBox.getValue());
 
         observableMovies.addAll(filterMovies(searchField.getText(), searchGenre, releaseYear, rating));
         sortMovies(observableMovies, sortBtn.getText().equals("Sort (asc)"));
@@ -153,6 +157,7 @@ public class HomeController implements Initializable {
             if (!releaseYear.contains(String.valueOf(movie.getReleaseYear()))) releaseYear.add(String.valueOf(movie.getReleaseYear()));
         }
         Collections.sort(releaseYear);
+        releaseYear.add(0, "All");
         releaseYearComboBox.setItems(releaseYear);
     }
 
