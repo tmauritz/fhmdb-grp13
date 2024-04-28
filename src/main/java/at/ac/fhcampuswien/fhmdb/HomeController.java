@@ -46,6 +46,7 @@ public class HomeController implements Initializable {
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
     private MovieAPI api;
+    private List<Movie> cachedMovies;
 
     /**
      * Initializes movie list and ui
@@ -63,9 +64,9 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         api = new MovieAPI();
-        List<Movie> loadedMovies = api.loadMovies();
-        observableMovies.addAll(loadedMovies);         // add data to observable list
-        updateReleaseYearComboBox(loadedMovies);
+        cachedMovies = api.loadMovies();
+        observableMovies.addAll(cachedMovies);         // add data to observable list
+        updateReleaseYearComboBox(cachedMovies);
 
         // initialize UI stuff
         sortMovies(observableMovies,true);
@@ -82,7 +83,7 @@ public class HomeController implements Initializable {
         Arrays.stream(Genre.values())
                 .forEach(genre -> {
                     StringBuilder result = new StringBuilder();
-                        String[] words = genre.toString().toLowerCase().split("_");
+                    String[] words = genre.toString().toLowerCase().split("_");
                     for (String word : words) {
                         if (!word.isEmpty()) {
                             result.append(Character.toUpperCase(word.charAt(0))); // Capitalize first letter
@@ -122,8 +123,11 @@ public class HomeController implements Initializable {
 
         //ratingComboBox.setOnAction(actionEvent -> executeFilter());
         //releaseYearComboBox.setOnAction(actionEvent -> executeFilter());
-        //genreComboBox.setOnAction(actionEvent -> executeFilter());
-        searchBtn.setOnAction(actionEvent -> executeFilter());
+        genreComboBox.setOnAction(actionEvent -> updateReleaseYearComboBox(filterMovies(cachedMovies,"", genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL))));
+        searchBtn.setOnAction(actionEvent -> {
+            executeFilter();
+            cachedMovies = api.loadMovies();
+        });
         searchField.setOnAction(actionEvent -> executeFilter());
         resetBtn.setOnAction(actionEvent -> resetFilter());
     }
