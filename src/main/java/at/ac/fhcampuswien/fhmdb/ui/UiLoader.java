@@ -57,4 +57,19 @@ public class UiLoader {
         internetAlert.showAndWait();
     }
 
+    public static void showError(String title, String header, Exception e){
+        Alert internetAlert = new Alert(Alert.AlertType.ERROR);
+        internetAlert.setTitle(title);
+        internetAlert.setHeaderText(header);
+        internetAlert.setContentText("Details: " + System.lineSeparator());
+        internetAlert.showAndWait();
+    }
+
+    public static void showInfo(String s) {
+        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+        infoAlert.setTitle("Info");
+        infoAlert.setHeaderText("Info");
+        infoAlert.setContentText(s);
+        infoAlert.showAndWait();
+    }
 }

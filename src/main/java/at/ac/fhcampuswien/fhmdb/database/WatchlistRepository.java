@@ -32,7 +32,7 @@ public class WatchlistRepository {
         try {
             watchlistDao.create(movie);
         } catch (SQLException e) {
-            throw new DatabaseException(e);
+            throw new DatabaseException("Unable to add Element to Watchlist", e);
         }
     }
 

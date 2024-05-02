@@ -8,6 +8,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.UiLoader;
+import at.ac.fhcampuswien.fhmdb.ui.WatchlistCell;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,7 +59,7 @@ public class WatchlistController implements Initializable {
                 }
             });
         }
-        watchlistListView.setCellFactory(watchListListView -> new MovieCell(removeFromWatchlist)); // use custom cell factory to display data
+        watchlistListView.setCellFactory(watchListListView -> new WatchlistCell(removeFromWatchlist)); // use custom cell factory to display data
         watchlistListView.setItems(observableWatchlistMovies);   // set data of observable list to list view
     }
 

@@ -1,8 +1,5 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
-import at.ac.fhcampuswien.fhmdb.controller.HomeController;
-import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
-import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
@@ -19,7 +16,7 @@ import javafx.scene.text.Font;
 
 import java.util.List;
 
-public class MovieCell extends ListCell<Movie> {
+public class WatchlistCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
     JFXButton watchlistBtn = new JFXButton();
@@ -27,9 +24,9 @@ public class MovieCell extends ListCell<Movie> {
     private final VBox buttons = new VBox(watchlistBtn);
     private final HBox layout = new HBox(movieInfo, buttons);
 
-    public MovieCell(ClickEventHandler addToWatchlistClicked) {
+    public WatchlistCell(ClickEventHandler addToWatchlistClicked) {
         super();
-        watchlistBtn.setText("Add to watchlist");
+        watchlistBtn.setText("Remove from watchlist");
         watchlistBtn.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem());
         });
@@ -76,7 +73,7 @@ public class MovieCell extends ListCell<Movie> {
             detail.setWrapText(true);
             layout.setPadding(new Insets(10));
             movieInfo.spacingProperty().set(10);
-            movieInfo.alignmentProperty().set(javafx.geometry.Pos.CENTER_LEFT);
+            movieInfo.alignmentProperty().set(Pos.CENTER_LEFT);
             movieInfo.setPrefWidth(this.getScene().getWidth() - 115);
             watchlistBtn.setPrefWidth(70);
             buttons.setMaxWidth(150);

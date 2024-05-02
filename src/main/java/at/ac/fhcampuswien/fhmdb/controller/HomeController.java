@@ -57,24 +57,29 @@ public class HomeController implements Initializable {
     private MovieAPI api;
     private List<Movie> cachedMovies;
 
-    public static final ClickEventHandler onAddToWatchlistClicked = (movie) ->
+    public final ClickEventHandler onAddToWatchlistClicked = (movie) ->
     {
         try {
             WatchlistRepository.getWatchlistRepository().addToWatchlist(new WatchlistMovieEntity(movie.getId()));
         } catch (DatabaseException e) {
-            e.printStackTrace();
-            UiLoader.databaseError();
+            //check if Movie is on Watchlist
+            boolean onWatchlist = false;
+            try {
+                if(WatchlistRepository.getWatchlistRepository().isOnWatchList(movie)){
+                    UiLoader.showInfo("Element already on Watchlist.");
+                    onWatchlist = true;
+                }else{
+                    UiLoader.showError("Watchlist Error", e.getMessage(), e);
+                }
+            } catch (DatabaseException ex) {
+                UiLoader.showError("Error communicating with Database", ex.getMessage(), ex);
+            }
+            if(!onWatchlist){
+                e.printStackTrace();
+                UiLoader.showError("Watchlist Error", e.getMessage(), e);
+            }
         }
     };
-
-    public static final ClickEventHandler onRemoveFromWatchlistClicked = (movie) -> {
-        try {
-            WatchlistRepository.getWatchlistRepository().removeFromWatchlist(movie.getId());
-        } catch (DatabaseException e) {
-            UiLoader.databaseError();
-        }
-    };
-
 
     /**
      * Initializes movie list and ui
