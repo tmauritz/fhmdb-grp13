@@ -69,13 +69,13 @@ public class WatchlistCell extends ListCell<Movie> {
 
             // layout
             title.fontProperty().set(Font.font(20));
-            detail.setMaxWidth(this.getScene().getWidth() - 100);
+            detail.setMaxWidth(this.getScene().getWidth() - 200);
             detail.setWrapText(true);
             layout.setPadding(new Insets(10));
             movieInfo.spacingProperty().set(10);
             movieInfo.alignmentProperty().set(Pos.CENTER_LEFT);
-            movieInfo.setPrefWidth(this.getScene().getWidth() - 115);
-            watchlistBtn.setPrefWidth(70);
+            movieInfo.setPrefWidth(this.getScene().getWidth() - 180);
+            watchlistBtn.setPrefWidth(150);
             buttons.setMaxWidth(150);
             buttons.setAlignment(Pos.TOP_RIGHT);
             setGraphic(layout);

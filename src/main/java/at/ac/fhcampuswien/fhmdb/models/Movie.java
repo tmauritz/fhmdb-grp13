@@ -1,6 +1,9 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
 import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.ui.UiLoader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +20,11 @@ public class Movie implements Comparable<Movie>{
     private final List<String> directors;
     private final List<String> writers;
     private final String imgUrl;
+    private boolean onWatchlist;
+
+    public void setWatchlist(boolean bool){
+        onWatchlist = bool;
+    }
 
     public Movie(String id, String title, List<Genre> genres, int releaseYear, String description, String imgUrl, int lengthInMinutes, List<String> directors, List<String> writers, List<String> mainCast, double rating) {
         this.title = title;
@@ -30,6 +38,11 @@ public class Movie implements Comparable<Movie>{
         this.directors = directors;
         this.writers = writers;
         this.imgUrl = imgUrl;
+        try {
+            onWatchlist = WatchlistRepository.getWatchlistRepository().isOnWatchList(this);
+        } catch (DatabaseException e) {
+            UiLoader.showError("Error communicating with Database", e.getMessage(), e);
+        }
     }
 
     public Movie(MovieEntity movieEntity){
