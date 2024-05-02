@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 
@@ -23,7 +24,7 @@ public class MovieAPI {
      *
      * @return all Movies
      */
-    public List<Movie> loadMovies() {
+    public List<Movie> loadMovies() throws MovieApiException {
         Request request = new Request.Builder()
                 .url(apiUrl)
                 .header("User-Agent", "MovieAPI.java")
@@ -41,7 +42,7 @@ public class MovieAPI {
      * @param rating      movie rating
      * @return Movies matching the search criteria
      */
-    public List<Movie> loadMovies(String query, Genre genre, int releaseYear, double rating) {
+    public List<Movie> loadMovies(String query, Genre genre, int releaseYear, double rating) throws MovieApiException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUrl)).newBuilder();
         urlBuilder
                 .addQueryParameter("query", query)
@@ -67,20 +68,19 @@ public class MovieAPI {
      */
 
     @NotNull
-    private List<Movie> getMovies(Request request) {
+    private List<Movie> getMovies(Request request) throws MovieApiException {
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            if (!response.isSuccessful()) throw new MovieApiException();
 
             if (response.body() != null) {
                 Gson gson = new Gson();
                 return Arrays.asList(gson.fromJson(response.body().string(), Movie[].class));
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
             return new ArrayList<>();
         }
-
         return new ArrayList<>();
     }
 

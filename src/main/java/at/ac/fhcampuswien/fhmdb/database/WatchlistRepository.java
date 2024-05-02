@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
-import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class WatchlistRepository {
 
-    private Dao<WatchlistMovieEntity, Integer> watchlistDao;
+    private final Dao<WatchlistMovieEntity, Integer> watchlistDao;
 
-    public WatchlistRepository() {
+    public WatchlistRepository() throws DatabaseException {
         watchlistDao = DatabaseManager.getDatabaseManager().getWatchlistDao();
     }
 
@@ -20,12 +20,20 @@ public class WatchlistRepository {
      * @param movie WatchlistMovieEntity.
      * @throws SQLException Throws exception when encountering issues with the database.
      */
-    public void addToWatchlist(WatchlistMovieEntity movie) throws SQLException {
-        watchlistDao.create(movie);
+    public void addToWatchlist(WatchlistMovieEntity movie) throws DatabaseException {
+        try {
+            watchlistDao.create(movie);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
-    public List<WatchlistMovieEntity> getWatchlist() throws SQLException {
-        return watchlistDao.queryForAll();
+    public List<WatchlistMovieEntity> getWatchlist() throws DatabaseException {
+        try {
+            return watchlistDao.queryForAll();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
     /**
@@ -34,9 +42,13 @@ public class WatchlistRepository {
      * @return The number of deleted movies from database.
      * @throws SQLException Throws exception when encountering issues with the database.
      */
-    public int removeFromWatchlist(String apiId) throws SQLException {
+    public int removeFromWatchlist(String apiId) throws DatabaseException {
         DeleteBuilder<WatchlistMovieEntity, Integer> deleteBuilder = watchlistDao.deleteBuilder();
-        deleteBuilder.where().ge("apiId", apiId);
-        return deleteBuilder.delete();
+        try {
+            deleteBuilder.where().ge("apiId", apiId);
+            return deleteBuilder.delete();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 }

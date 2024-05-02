@@ -5,7 +5,6 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class MovieEntity {
        this.description = movie.getDescription();
        this.genres = genresToStringList(movie.getGenres());
        this.releaseYear = movie.getReleaseYear();
-       this.imgUrl = movie.getUrl();
+       this.imgUrl = movie.getImgUrl();
        this.lengthInMinutes = movie.getLengthInMinutes();
        this.rating = movie.getRating();
     }

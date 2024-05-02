@@ -1,8 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.controller;
 
-import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.DatabaseManager;
+import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -13,15 +15,11 @@ import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -72,8 +70,15 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        api = new MovieAPI();
-        cachedMovies = api.loadMovies();
+        try{
+            api = new MovieAPI();
+            cachedMovies = api.loadMovies();
+            MovieRepository.getMovieRepository().addAllMovies(cachedMovies);
+        } catch (MovieApiException e){
+            UiLoader.apiError();
+        } catch (DatabaseException e){
+            UiLoader.databaseError();
+        }
         observableMovies.addAll(cachedMovies);         // add data to observable list
         updateReleaseYearComboBox(cachedMovies);
 
@@ -133,7 +138,15 @@ public class HomeController implements Initializable {
         genreComboBox.setOnAction(actionEvent -> updateReleaseYearComboBox(filterMovies(cachedMovies,"", genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL))));
         searchBtn.setOnAction(actionEvent -> {
             executeFilter();
-            cachedMovies = api.loadMovies();
+            try {
+                cachedMovies = api.loadMovies();
+                MovieRepository.getMovieRepository().removeAll();
+                MovieRepository.getMovieRepository().addAllMovies(cachedMovies);
+            } catch (MovieApiException e) {
+                UiLoader.apiError();
+            } catch (DatabaseException e){
+                UiLoader.databaseError();
+            }
         });
         searchField.setOnAction(actionEvent -> executeFilter());
         resetBtn.setOnAction(actionEvent -> resetFilter());
@@ -217,8 +230,13 @@ public class HomeController implements Initializable {
      * @return Filtered movie list
      */
     public List<Movie> filterMovies(String query, Genre genre, int releaseYear, double rating) {
-        List<Movie> filteredMovies = api.loadMovies(query, genre, releaseYear, rating);
-        updateReleaseYearComboBox(filteredMovies);
+        List<Movie> filteredMovies = null;
+        try {
+            filteredMovies = api.loadMovies(query, genre, releaseYear, rating);
+        } catch (MovieApiException e) {
+           UiLoader.apiError();
+        }
+        updateReleaseYearComboBox(Objects.requireNonNull(filteredMovies));
         return filteredMovies;
     }
 

@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -14,37 +15,31 @@ public class DatabaseManager {
     public final static String password = "passwort";
 
     public static ConnectionSource connectionSource;
-    private Dao<MovieEntity, Integer> movieDao;
-    private Dao<WatchlistMovieEntity, Integer> watchlistDao;
+    private final Dao<MovieEntity, Integer> movieDao;
+    private final Dao<WatchlistMovieEntity, Integer> watchlistDao;
     private static DatabaseManager databaseManager;
 
     /**
      * Private constructor ensures no instances of class can be made.
      * Creates the necessary daos and sets up the database.
      */
-    private DatabaseManager() {
-        //TODO: Move to correct spot
-        try {
+    private DatabaseManager() throws DatabaseException {
             createConnection();
+        try {
             movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
             watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
-            createTables();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new DatabaseException(e);
         }
+            createTables();
     }
-
-    /*public void testDatabase() throws SQLException {
-       MovieEntity movie = new MovieEntity("a00b56aa-0eaf-4332-a02d-736910950128", "The Goodfather","The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.", "Drama", 1972, "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",175);
-       movieDao.create(movie);
-    }*/
 
     /**
      * Singleton pattern. Creates one single instance of the class,
      * ensures no additional ones are made.
      * @return The project's databaseManager.
      */
-    public static DatabaseManager getDatabaseManager() {
+    public static DatabaseManager getDatabaseManager() throws DatabaseException {
         if (databaseManager == null) databaseManager = new DatabaseManager();
         return databaseManager;
     }
@@ -59,19 +54,27 @@ public class DatabaseManager {
 
     /**
      * Checks if tables for the Entity classes have been made, creates new ones if not.
-     * @throws SQLException Throws exception when encountering issues with the database.
+     * @throws DatabaseException Throws exception when encountering issues with the database.
      */
-    private static void createTables() throws SQLException {
-        TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
-        TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
+    private static void createTables() throws DatabaseException {
+        try {
+            TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
+            TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
     /**
      * Sets new connection source with the defined parameters of URL, username, password.
-     * @throws SQLException Throws exception when encountering issues with the database.
+     * @throws DatabaseException Throws exception when encountering issues with the database.
      */
-    private static void createConnection() throws SQLException {
-        connectionSource = new JdbcConnectionSource(DB_URL, username, password);
+    private static void createConnection() throws DatabaseException {
+        try {
+            connectionSource = new JdbcConnectionSource(DB_URL, username, password);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
 }

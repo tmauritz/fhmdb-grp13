@@ -30,7 +30,7 @@
             <children>
                <MenuButton id="burgerMenu" alignment="CENTER_RIGHT" mnemonicParsing="false" popupSide="LEFT">
                  <items>
-                     <MenuItem disable="true" mnemonicParsing="false" text="Home" />
+                   <MenuItem disable="true" mnemonicParsing="false" text="Home" />
                    <MenuItem mnemonicParsing="false" onAction="#showWatchlist" text="Watchlist" />
                    <MenuItem mnemonicParsing="false" text="About" />
                  </items>

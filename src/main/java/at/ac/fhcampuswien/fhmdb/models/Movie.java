@@ -2,8 +2,6 @@ package at.ac.fhcampuswien.fhmdb.models;
 
 import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,9 +16,9 @@ public class Movie implements Comparable<Movie>{
     private final int lengthInMinutes;
     private final List<String> directors;
     private final List<String> writers;
-    private final String url;
+    private final String imgUrl;
 
-    public Movie(String id, String title, List<Genre> genres, int releaseYear, String description, String url,  int lengthInMinutes, List<String> directors, List<String> writers, List<String> mainCast, double rating) {
+    public Movie(String id, String title, List<Genre> genres, int releaseYear, String description, String imgUrl, int lengthInMinutes, List<String> directors, List<String> writers, List<String> mainCast, double rating) {
         this.title = title;
         this.description = description;
         this.genres = genres;
@@ -31,7 +29,7 @@ public class Movie implements Comparable<Movie>{
         this.lengthInMinutes = lengthInMinutes;
         this.directors = directors;
         this.writers = writers;
-        this.url = url;
+        this.imgUrl = imgUrl;
     }
 
     public Movie(MovieEntity movieEntity){
@@ -41,7 +39,7 @@ public class Movie implements Comparable<Movie>{
         this.rating = movieEntity.getRating();
         this.id = movieEntity.getApiId();
         this.lengthInMinutes = movieEntity.getLengthInMinutes();
-        this.url = movieEntity.getImgUrl();
+        this.imgUrl = movieEntity.getImgUrl();
         this.genres = genreStringToList(movieEntity.getGenres());
         this.mainCast = new LinkedList<>();
         this.directors = new LinkedList<>();
@@ -88,8 +86,8 @@ public class Movie implements Comparable<Movie>{
         return writers;
     }
 
-    public String getUrl() {
-        return url;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
     /**
