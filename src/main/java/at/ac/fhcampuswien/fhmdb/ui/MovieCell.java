@@ -1,5 +1,8 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.controller.HomeController;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
@@ -23,6 +26,14 @@ public class MovieCell extends ListCell<Movie> {
     private final VBox movieInfo = new VBox(title, detail);
     private final VBox buttons = new VBox(watchlistBtn);
     private final HBox layout = new HBox(movieInfo, buttons);
+
+    public MovieCell(ClickEventHandler addToWatchlistClicked) {
+        super();
+        watchlistBtn.setOnMouseClicked(mouseEvent -> {
+            addToWatchlistClicked.onClick(getItem());
+        });
+    }
+
     /**
      * Handles visual representation of a movie
      *
@@ -50,7 +61,26 @@ public class MovieCell extends ListCell<Movie> {
                 if(i != genres.size()) detailText.append(", ");
             }
             detail.setText(detailText.toString());
-            watchlistBtn.setText("Watchlist");
+
+            boolean isOnWatchList = false;
+            try {
+                isOnWatchList = WatchlistRepository.getWatchlistRepository().isOnWatchList(movie);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+            finally{
+                if(isOnWatchList){
+                    watchlistBtn.setText("Remove from watchlist");
+                    watchlistBtn.setOnMouseClicked(mouseEvent -> {
+                        HomeController.onRemoveFromWatchlistClicked.onClick(getItem());
+                    });
+                }else{
+                    watchlistBtn.setText("Add to watchlist");
+                    watchlistBtn.setOnMouseClicked(mouseEvent -> {
+                        HomeController.onAddToWatchlistClicked.onClick(getItem());
+                    });
+                }
+            }
 
             // color scheme
             title.getStyleClass().add("text-yellow");

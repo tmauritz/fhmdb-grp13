@@ -30,16 +30,13 @@ public class UiLoader {
     }
 
     public static void showWatchlist() throws IOException{
-        if (watchlist == null) {
-            FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("watchlist-view.fxml"));
-            watchlist = new Scene(fxmlLoader.load(), 890, 620);
-            watchlist.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
-        }
+        FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("watchlist-view.fxml"));
+        watchlist = new Scene(fxmlLoader.load(), 890, 620);
+        watchlist.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
         mainStage.setTitle("FHMDb");
         mainStage.setScene(watchlist);
         mainStage.setResizable(false);
         mainStage.show();
-
     }
 
     public static void databaseError(){
@@ -59,4 +56,5 @@ public class UiLoader {
         internetAlert.setContentText(content);
         internetAlert.showAndWait();
     }
+
 }

@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb.database;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -66,8 +67,20 @@ public class MovieRepository {
         }
     }
 
-    public MovieEntity getMovie(String apiId){
+    public Movie getMovie(String apiId) throws DatabaseException {
         //TODO: ask if this is needed
+        //it is in fact needed
+        QueryBuilder<MovieEntity, Integer> whereQuery = movieDao.queryBuilder();
+        List<MovieEntity> result;
+        try {
+            whereQuery.where().eq("apiID", apiId);
+            result = whereQuery.query();
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+        if(result != null){
+            return MovieEntity.toMovies(result).get(0);
+        }
         return null;
     }
 

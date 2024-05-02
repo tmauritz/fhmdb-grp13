@@ -1,12 +1,14 @@
 package at.ac.fhcampuswien.fhmdb.controller;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
-import at.ac.fhcampuswien.fhmdb.database.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.ui.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.UiLoader;
 import com.jfoenix.controls.JFXButton;
@@ -55,6 +57,25 @@ public class HomeController implements Initializable {
     private MovieAPI api;
     private List<Movie> cachedMovies;
 
+    public static final ClickEventHandler onAddToWatchlistClicked = (movie) ->
+    {
+        try {
+            WatchlistRepository.getWatchlistRepository().addToWatchlist(new WatchlistMovieEntity(movie.getId()));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            UiLoader.databaseError();
+        }
+    };
+
+    public static final ClickEventHandler onRemoveFromWatchlistClicked = (movie) -> {
+        try {
+            WatchlistRepository.getWatchlistRepository().removeFromWatchlist(movie.getId());
+        } catch (DatabaseException e) {
+            UiLoader.databaseError();
+        }
+    };
+
+
     /**
      * Initializes movie list and ui
      * Add functionality for buttons and filters
@@ -85,7 +106,7 @@ public class HomeController implements Initializable {
         // initialize UI stuff
         sortMovies(observableMovies,true);
         movieListView.setItems(observableMovies);   // set data of observable list to list view
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // use custom cell factory to display data
 
         //add genre filter items
         genreComboBox.setPromptText("Filter by Genre");

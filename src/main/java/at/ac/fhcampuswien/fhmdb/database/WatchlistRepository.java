@@ -1,18 +1,26 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class WatchlistRepository {
 
+    private static WatchlistRepository watchlistRepository;
     private final Dao<WatchlistMovieEntity, Integer> watchlistDao;
 
-    public WatchlistRepository() throws DatabaseException {
+    private WatchlistRepository() throws DatabaseException {
         watchlistDao = DatabaseManager.getDatabaseManager().getWatchlistDao();
+    }
+
+    public static WatchlistRepository getWatchlistRepository() throws DatabaseException {
+        if (watchlistRepository == null) watchlistRepository = new WatchlistRepository();
+        return watchlistRepository;
     }
 
     /**
@@ -26,6 +34,18 @@ public class WatchlistRepository {
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
+    }
+
+    public boolean isOnWatchList(Movie movie) throws DatabaseException {
+        QueryBuilder<WatchlistMovieEntity, Integer> whereQuery = watchlistDao.queryBuilder();
+        List<WatchlistMovieEntity> result;
+        try {
+            whereQuery.where().eq("apiID", movie.getId());
+            result = whereQuery.query();
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+        return result != null && !result.isEmpty();
     }
 
     public List<WatchlistMovieEntity> getWatchlist() throws DatabaseException {
