@@ -1,19 +1,25 @@
 package at.ac.fhcampuswien.fhmdb.controller;
 
+import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.ui.UiLoader;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -124,8 +130,6 @@ public class HomeController implements Initializable {
             }
         });
 
-        //ratingComboBox.setOnAction(actionEvent -> executeFilter());
-        //releaseYearComboBox.setOnAction(actionEvent -> executeFilter());
         genreComboBox.setOnAction(actionEvent -> updateReleaseYearComboBox(filterMovies(cachedMovies,"", genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL))));
         searchBtn.setOnAction(actionEvent -> {
             executeFilter();
@@ -285,4 +289,9 @@ public class HomeController implements Initializable {
                 .filter(movie -> movie.getReleaseYear() > Math.min(startYear, endYear) && movie.getReleaseYear() < Math.max(startYear, endYear))
                 .toList();
     }
+
+    public void showWatchlist() throws IOException{
+        UiLoader.showWatchlist();
+    }
+
 }

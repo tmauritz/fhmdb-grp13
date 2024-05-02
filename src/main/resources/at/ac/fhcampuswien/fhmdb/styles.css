@@ -46,3 +46,13 @@
 .button:hover {
     -fx-background-color: #7cd4dd;
  }
+
+ #burgerMenu {
+    -fx-background-image: url("BurgerMenu.png");
+    -fx-background-size: 100%;
+    -fx-background-color: transparent;
+ }
+
+ #burgerMenu .arrow {
+    -fx-background-color: transparent;
+ }

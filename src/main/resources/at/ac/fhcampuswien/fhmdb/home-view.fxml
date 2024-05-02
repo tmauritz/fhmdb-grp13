@@ -8,22 +8,40 @@
 <?import javafx.scene.text.*?>
 
 <VBox prefHeight="331.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.controller.HomeController">
-   <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="347.0" spacing="20.0" style="-fx-background-color: black;">
-      <padding>
-         <Insets bottom="7.0" left="10.0" top="7.0" />
-      </padding>
+   <StackPane>
       <children>
-         <Label style="-fx-background-color: F5C518;" text="FHMDb">
-            <font>
-               <Font name="Calibri Bold" size="24.0" />
-            </font>
+         <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="349.0" spacing="20.0" style="-fx-background-color: black;">
             <padding>
-               <Insets left="2.0" right="2.0" />
+               <Insets bottom="7.0" left="10.0" top="7.0" />
             </padding>
-         </Label>
-         <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
+            <children>
+               <Label style="-fx-background-color: F5C518;" text="FHMDb">
+                  <font>
+                     <Font name="Calibri Bold" size="24.0" />
+                  </font>
+                  <padding>
+                     <Insets left="2.0" right="2.0" />
+                  </padding>
+               </Label>
+               <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
+            </children>
+         </HBox>
+         <VBox alignment="CENTER_RIGHT" prefHeight="28.0">
+            <children>
+               <MenuButton id="burgerMenu" alignment="CENTER_RIGHT" mnemonicParsing="false" popupSide="LEFT">
+                 <items>
+                     <MenuItem disable="true" mnemonicParsing="false" text="Home" />
+                   <MenuItem mnemonicParsing="false" onAction="#showWatchlist" text="Watchlist" />
+                   <MenuItem mnemonicParsing="false" text="About" />
+                 </items>
+               </MenuButton>
+            </children>
+            <padding>
+               <Insets right="10.0" />
+            </padding>
+         </VBox>
       </children>
-   </HBox>
+   </StackPane>
    <HBox spacing="5.0" styleClass="background-black" stylesheets="@styles.css">
       <children>
          <JFXButton fx:id="sortBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Sort (asc)">

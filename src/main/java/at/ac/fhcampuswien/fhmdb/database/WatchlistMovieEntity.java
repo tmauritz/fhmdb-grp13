@@ -12,8 +12,12 @@ public class WatchlistMovieEntity {
     @DatabaseField (unique = true)
     private String apiId;
 
+    //@DatabaseField (foreign = true)
+    //private MovieEntity movie;
+
     public WatchlistMovieEntity(){
     }
+
 
     public WatchlistMovieEntity(String apiId) {
         this.apiId = apiId;
