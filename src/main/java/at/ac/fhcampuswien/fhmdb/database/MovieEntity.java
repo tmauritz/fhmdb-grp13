@@ -94,6 +94,11 @@ public class MovieEntity {
         return rating;
     }
 
+    /**
+     * Translate list of genres into single String with separating commas.
+     * @param genres List of genres.
+     * @return String of genres.
+     */
     private String genresToStringList(List<Genre> genres){
         StringBuilder genresBuilder = new StringBuilder();
         genres.forEach(genre -> genresBuilder.append(genre).append(", "));
@@ -101,12 +106,22 @@ public class MovieEntity {
         return genresBuilder.toString();
     }
 
+    /**
+     * Translates list of movies into list of movieEntity.
+     * @param movies List of movies.
+     * @return List of movieEntities.
+     */
     public static List<MovieEntity> fromMovies(List<Movie> movies){
         List<MovieEntity>entities = new LinkedList<>();
         movies.forEach(movie->entities.add(new MovieEntity(movie)));
         return entities;
     }
 
+    /**
+     * Translates list of movieEntity into list of movies.
+     * @param movieEntities List of movieEntities.
+     * @return List of movies.
+     */
     public static List<Movie> toMovies(List<MovieEntity> movieEntities){
         List<Movie> movies = new LinkedList<>();
         movieEntities.forEach(movieEntity -> movies.add(new Movie(movieEntity)));

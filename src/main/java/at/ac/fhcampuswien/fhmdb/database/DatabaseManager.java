@@ -18,6 +18,10 @@ public class DatabaseManager {
     private Dao<WatchlistMovieEntity, Integer> watchlistDao;
     private static DatabaseManager databaseManager;
 
+    /**
+     * Private constructor ensures no instances of class can be made.
+     * Creates the necessary daos and sets up the database.
+     */
     private DatabaseManager() {
         //TODO: Move to correct spot
         try {
@@ -35,6 +39,11 @@ public class DatabaseManager {
        movieDao.create(movie);
     }*/
 
+    /**
+     * Singleton pattern. Creates one single instance of the class,
+     * ensures no additional ones are made.
+     * @return The project's databaseManager.
+     */
     public static DatabaseManager getDatabaseManager() {
         if (databaseManager == null) databaseManager = new DatabaseManager();
         return databaseManager;
@@ -48,11 +57,19 @@ public class DatabaseManager {
         return watchlistDao;
     }
 
+    /**
+     * Checks if tables for the Entity classes have been made, creates new ones if not.
+     * @throws SQLException Throws exception when encountering issues with the database.
+     */
     private static void createTables() throws SQLException {
         TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
     }
 
+    /**
+     * Sets new connection source with the defined parameters of URL, username, password.
+     * @throws SQLException Throws exception when encountering issues with the database.
+     */
     private static void createConnection() throws SQLException {
         connectionSource = new JdbcConnectionSource(DB_URL, username, password);
     }
