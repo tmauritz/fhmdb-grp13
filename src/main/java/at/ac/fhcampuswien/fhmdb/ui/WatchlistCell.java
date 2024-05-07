@@ -26,7 +26,7 @@ public class WatchlistCell extends ListCell<Movie> {
 
     public WatchlistCell(ClickEventHandler addToWatchlistClicked) {
         super();
-        watchlistBtn.setText("Remove from watchlist");
+        watchlistBtn.setText("Remove");
         watchlistBtn.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem());
         });
@@ -74,8 +74,8 @@ public class WatchlistCell extends ListCell<Movie> {
             layout.setPadding(new Insets(10));
             movieInfo.spacingProperty().set(10);
             movieInfo.alignmentProperty().set(Pos.CENTER_LEFT);
-            movieInfo.setPrefWidth(this.getScene().getWidth() - 180);
-            watchlistBtn.setPrefWidth(150);
+            movieInfo.setPrefWidth(this.getScene().getWidth() - 155);
+            watchlistBtn.setPrefWidth(90);
             buttons.setMaxWidth(150);
             buttons.setAlignment(Pos.TOP_RIGHT);
             setGraphic(layout);

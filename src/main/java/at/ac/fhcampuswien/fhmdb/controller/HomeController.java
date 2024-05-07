@@ -1,9 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controller;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
-import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
-import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
-import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.database.*;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -101,9 +99,15 @@ public class HomeController implements Initializable {
             cachedMovies = api.loadMovies();
             MovieRepository.getMovieRepository().addAllMovies(cachedMovies);
         } catch (MovieApiException e){
-            UiLoader.apiError();
+            UiLoader.showError("API connection failed","Couldn't establish a connection to the API. Check your internet connection. Switching to offline mode.");
+            try {
+                cachedMovies = MovieEntity.toMovies(MovieRepository.getMovieRepository().getAllMovies());
+            } catch (DatabaseException ex) {
+                UiLoader.showError("Cache Error", "Application must be closed.");
+                UiLoader.close();
+            }
         } catch (DatabaseException e){
-            UiLoader.databaseError();
+            UiLoader.showError("Database connection failed", "Couldn't update cache. Check database connection.");
         }
         observableMovies.addAll(cachedMovies);         // add data to observable list
         updateReleaseYearComboBox(cachedMovies);
@@ -161,7 +165,7 @@ public class HomeController implements Initializable {
             }
         });
 
-        genreComboBox.setOnAction(actionEvent -> updateReleaseYearComboBox(filterMovies(cachedMovies,"", genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL))));
+        genreComboBox.setOnAction(actionEvent -> updateReleaseYearComboBox(filterMovies(cachedMovies,"", genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL), 0, 0)));
         searchBtn.setOnAction(actionEvent -> {
             executeFilter();
             try {
@@ -169,9 +173,15 @@ public class HomeController implements Initializable {
                 MovieRepository.getMovieRepository().removeAll();
                 MovieRepository.getMovieRepository().addAllMovies(cachedMovies);
             } catch (MovieApiException e) {
-                UiLoader.apiError();
+                UiLoader.showError("API connection failed","Couldn't establish a connection to the API. Check your internet connection.");
+                try {
+                    cachedMovies = MovieEntity.toMovies(MovieRepository.getMovieRepository().getAllMovies());
+                } catch (DatabaseException ex) {
+                    UiLoader.showError("Cache Error", "Application must be closed.");
+                    UiLoader.close();
+                }
             } catch (DatabaseException e){
-                UiLoader.databaseError();
+                UiLoader.showError("Database connection failed", "Couldn't establish a connection to the database.");
             }
         });
         searchField.setOnAction(actionEvent -> executeFilter());
@@ -192,7 +202,7 @@ public class HomeController implements Initializable {
         double rating = Double.parseDouble(ratingComboBox.getValue() == null || ratingComboBox.getValue().equals("All") ? "0" : ratingComboBox.getValue());
         int releaseYear = Integer.parseInt(releaseYearComboBox.getValue() == null || releaseYearComboBox.getValue().equals("All") ? "-1" : releaseYearComboBox.getValue());
 
-        observableMovies.addAll(filterMovies(searchField.getText(), searchGenre, releaseYear, rating));
+        observableMovies.addAll(filterApiMovies(searchField.getText(), searchGenre, releaseYear, rating));
         sortMovies(observableMovies, sortBtn.getText().equals("Sort (asc)"));
         resetBtn.setDisable(searchField.getText().isBlank() && searchGenre.equals(Genre.ALL) && releaseYearComboBox.getValue() == null && ratingComboBox.getValue() == null);
     }
@@ -229,7 +239,7 @@ public class HomeController implements Initializable {
      * @param genre selected genre from comboBox
      * @return Filtered movie list
      */
-    public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre) {
+    public List<Movie> filterMovies(List<Movie> movies, String query, Genre genre, int releaseYear, double rating) {
         List<Movie> filteredMovies = movies;
         query = query.trim().replaceAll("\\s{2,}", " ").toLowerCase();
         if (movies == null || genre == null) throw new IllegalArgumentException();
@@ -240,6 +250,16 @@ public class HomeController implements Initializable {
             String finalQuery = query;
             filteredMovies = filteredMovies.stream()
                     .filter(movie -> movie.getTitle().toLowerCase().contains(finalQuery) || movie.getDescription().toLowerCase().contains(finalQuery))
+                    .toList();
+        }
+        if (releaseYear != 0){
+            filteredMovies = filteredMovies.stream()
+                    .filter(movie -> movie.getReleaseYear() == releaseYear)
+                    .toList();
+        }
+        if (rating != 0){
+            filteredMovies = filteredMovies.stream()
+                    .filter(movie -> movie.getRating() >= rating)
                     .toList();
         }
         return filteredMovies;
@@ -255,12 +275,18 @@ public class HomeController implements Initializable {
      * @param rating selected rating (and up)
      * @return Filtered movie list
      */
-    public List<Movie> filterMovies(String query, Genre genre, int releaseYear, double rating) {
+    public List<Movie> filterApiMovies(String query, Genre genre, int releaseYear, double rating) {
         List<Movie> filteredMovies = null;
         try {
             filteredMovies = api.loadMovies(query, genre, releaseYear, rating);
         } catch (MovieApiException e) {
-           UiLoader.apiError();
+            try {
+                cachedMovies = MovieEntity.toMovies(MovieRepository.getMovieRepository().getAllMovies());
+            } catch (DatabaseException ex) {
+                UiLoader.showError("Cache Error", "Application must be closed.");
+                UiLoader.close();
+            }
+            filteredMovies = filterMovies(cachedMovies, query, genre, releaseYear, rating);
         }
         updateReleaseYearComboBox(Objects.requireNonNull(filteredMovies));
         return filteredMovies;

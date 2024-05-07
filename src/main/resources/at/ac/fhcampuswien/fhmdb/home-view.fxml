@@ -22,18 +22,23 @@
                   <padding>
                      <Insets left="2.0" right="2.0" />
                   </padding>
+                  <cursor>
+                     <Cursor fx:constant="DEFAULT" />
+                  </cursor>
                </Label>
                <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
             </children>
          </HBox>
-         <VBox alignment="CENTER_RIGHT" prefHeight="28.0">
+         <VBox alignment="CENTER_RIGHT" maxWidth="80.0" minWidth="80.0" prefHeight="28.0" StackPane.alignment="CENTER_RIGHT">
             <children>
                <MenuButton id="burgerMenu" alignment="CENTER_RIGHT" mnemonicParsing="false" popupSide="LEFT">
                  <items>
                    <MenuItem disable="true" mnemonicParsing="false" text="Home" />
                    <MenuItem mnemonicParsing="false" onAction="#showWatchlist" text="Watchlist" />
-                   <MenuItem mnemonicParsing="false" text="About" />
                  </items>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
                </MenuButton>
             </children>
             <padding>

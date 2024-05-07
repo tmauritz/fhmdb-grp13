@@ -20,7 +20,7 @@ public class FhmdbApplication extends Application {
         try {
             UiLoader.showMainMenu();
         } catch (IOException e) {
-            System.out.println("Error");
+            UiLoader.showError("Critical Error", "Application was closed.", e);
         }
     }
 

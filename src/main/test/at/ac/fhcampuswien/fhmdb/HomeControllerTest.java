@@ -67,7 +67,7 @@ public class HomeControllerTest {
 
         //WHEN
         HomeController testController = new HomeController();
-        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"",Genre.DRAMA);
+        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"",Genre.DRAMA,0,0);
 
         //THEN
         assertEquals(expectedMovies,filteredMovies);
@@ -125,7 +125,7 @@ public class HomeControllerTest {
 
         //WHEN
         HomeController testController = new HomeController();
-        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"",Genre.ALL);
+        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"",Genre.ALL,0,0);
 
         //THEN
         assertEquals(allTestMovies,filteredMovies);
@@ -187,7 +187,7 @@ public class HomeControllerTest {
 
         //WHEN
         HomeController testController = new HomeController();
-        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"Eternal Echoes",Genre.ALL);
+        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"Eternal Echoes",Genre.ALL,0,0);
 
         //THEN
         assertEquals(expectedMovie,filteredMovies);
@@ -247,7 +247,7 @@ public class HomeControllerTest {
 
         //WHEN
         HomeController testController = new HomeController();
-        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"choes of",Genre.ALL);
+        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"choes of",Genre.ALL,0,0);
 
         //THEN
         assertEquals(expectedMovie,filteredMovies);
@@ -308,7 +308,7 @@ public class HomeControllerTest {
 
         //WHEN
         HomeController testController = new HomeController();
-        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"must navigate the brutal",Genre.ALL);
+        List<Movie> filteredMovies = testController.filterMovies(allTestMovies,"must navigate the brutal",Genre.ALL,0,0);
 
         //THEN
         assertEquals(expectedMovie,filteredMovies);
@@ -366,7 +366,7 @@ public class HomeControllerTest {
         allTestMovies.add(movie3);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "", Genre.ALL);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "", Genre.ALL,0,0);
 
         //THEN
         assertEquals(resultMovie,allTestMovies);
@@ -427,7 +427,7 @@ public class HomeControllerTest {
         expectedMovies.add(movie2);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "SHADOWED PATHS", Genre.ALL);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "SHADOWED PATHS", Genre.ALL,0,0);
 
         //THEN
         assertEquals(resultMovie, expectedMovies);
@@ -489,7 +489,7 @@ public class HomeControllerTest {
         expectedMovies.add(movie2);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "shadowed paths", Genre.ALL);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "shadowed paths", Genre.ALL,0,0);
 
         //THEN
         assertEquals(resultMovie, expectedMovies);
@@ -551,7 +551,7 @@ public class HomeControllerTest {
         expectedMovies.add(movie2);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, " Shadowed    Paths    ", Genre.ALL);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, " Shadowed    Paths    ", Genre.ALL,0,0);
 
         //THEN
         assertEquals(resultMovie, expectedMovies);
@@ -615,7 +615,7 @@ public class HomeControllerTest {
         expectedMovies.add(movie3);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "War", Genre.ALL);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "War", Genre.ALL,0,0);
 
         //THEN
         assertEquals(resultMovie, expectedMovies);
@@ -800,7 +800,7 @@ public class HomeControllerTest {
         allTestMovies.add(movie3);
 
         //WHEN THEN
-        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(allTestMovies, "", null));
+        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(allTestMovies, "", null,0,0));
     }
 
     @Test
@@ -809,7 +809,7 @@ public class HomeControllerTest {
         HomeController homeController = new HomeController();
 
         //WHEN THEN
-        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(null, "", Genre.ROMANCE));
+        assertThrows(IllegalArgumentException.class, ()->homeController.filterMovies(null, "", Genre.ROMANCE,0,0));
     }
 
     @Test
@@ -864,7 +864,7 @@ public class HomeControllerTest {
         allTestMovies.add(movie3);
 
         //WHEN
-        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "Shadowed Paths", Genre.BIOGRAPHY);
+        List<Movie> resultMovie = homeController.filterMovies(allTestMovies, "Shadowed Paths", Genre.BIOGRAPHY,0,0);
 
         //THEN
         assertTrue(resultMovie.isEmpty());

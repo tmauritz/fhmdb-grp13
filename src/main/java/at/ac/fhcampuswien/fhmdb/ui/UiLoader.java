@@ -38,17 +38,6 @@ public class UiLoader {
         mainStage.setResizable(false);
         mainStage.show();
     }
-
-    public static void databaseError(){
-        showError("Internet Connection Error","Connection to Database could not be established.");
-//        mainStage.close();
-    }
-
-    public static void apiError(){
-        showError("API Error","No connection to API");
-//        mainStage.close();
-    }
-
     public static void showError(String title, String content){
         Alert internetAlert = new Alert(Alert.AlertType.ERROR);
         internetAlert.setTitle(title);
@@ -61,7 +50,7 @@ public class UiLoader {
         Alert internetAlert = new Alert(Alert.AlertType.ERROR);
         internetAlert.setTitle(title);
         internetAlert.setHeaderText(header);
-        internetAlert.setContentText("Details: " + System.lineSeparator());
+        internetAlert.setContentText("Details: " + System.lineSeparator() + e.getMessage());
         internetAlert.showAndWait();
     }
 
@@ -71,5 +60,9 @@ public class UiLoader {
         infoAlert.setHeaderText("Info");
         infoAlert.setContentText(s);
         infoAlert.showAndWait();
+    }
+
+    public static void close() {
+        mainStage.close();
     }
 }

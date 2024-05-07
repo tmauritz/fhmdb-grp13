@@ -29,7 +29,7 @@ public class MovieCell extends ListCell<Movie> {
 
     public MovieCell(ClickEventHandler addToWatchlistClicked) {
         super();
-        watchlistBtn.setText("Add to watchlist");
+        watchlistBtn.setText("Watchlist");
         watchlistBtn.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem());
 
@@ -79,7 +79,7 @@ public class MovieCell extends ListCell<Movie> {
             movieInfo.spacingProperty().set(10);
             movieInfo.alignmentProperty().set(javafx.geometry.Pos.CENTER_LEFT);
             movieInfo.setPrefWidth(this.getScene().getWidth() - 155);
-            watchlistBtn.setPrefWidth(110);
+            watchlistBtn.setPrefWidth(90);
             buttons.setMaxWidth(150);
             buttons.setAlignment(Pos.TOP_RIGHT);
             setGraphic(layout);
