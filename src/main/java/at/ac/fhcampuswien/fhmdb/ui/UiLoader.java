@@ -17,13 +17,17 @@ public class UiLoader {
         UiLoader.mainStage = mainStage;
     }
 
+    public static void setMainStageTitle(String title){
+        mainStage.setTitle(title);
+    }
+
     public static void showMainMenu() throws IOException {
         if(mainMenu == null){
             FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("home-view.fxml"));
             mainMenu = new Scene(fxmlLoader.load(), 890, 620);
             mainMenu.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
         }
-        mainStage.setTitle("FHMDb");
+//        mainStage.setTitle("FHMDb");
         mainStage.setScene(mainMenu);
         mainStage.setResizable(false);
         mainStage.show();

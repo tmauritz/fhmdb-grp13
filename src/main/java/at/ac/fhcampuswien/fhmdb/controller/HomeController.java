@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -49,13 +50,16 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton resetBtn;
 
+    @FXML
+    public Label offlineLabel;
+
     private Map<String, Genre> genreMap;
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
     private MovieAPI api;
     private List<Movie> cachedMovies;
 
-    public final ClickEventHandler onAddToWatchlistClicked = (movie) ->
+    private final ClickEventHandler onAddToWatchlistClicked = (movie) ->
     {
         try {
             WatchlistRepository.getWatchlistRepository().addToWatchlist(new WatchlistMovieEntity(movie.getId()));
@@ -95,10 +99,15 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try{
+            UiLoader.setMainStageTitle("FHMDb");
+            offlineLabel.setVisible(false);
             api = new MovieAPI();
             cachedMovies = api.loadMovies();
+            MovieRepository.getMovieRepository().removeAll();
             MovieRepository.getMovieRepository().addAllMovies(cachedMovies);
         } catch (MovieApiException e){
+            UiLoader.setMainStageTitle("FHMDb (Offline-Mode)");
+            offlineLabel.setVisible(true);
             UiLoader.showError("API connection failed","Couldn't establish a connection to the API. Check your internet connection. Switching to offline mode.");
             try {
                 cachedMovies = MovieEntity.toMovies(MovieRepository.getMovieRepository().getAllMovies());
@@ -169,10 +178,14 @@ public class HomeController implements Initializable {
         searchBtn.setOnAction(actionEvent -> {
             executeFilter();
             try {
+                UiLoader.setMainStageTitle("FHMDb");
+                offlineLabel.setVisible(false);
                 cachedMovies = api.loadMovies();
                 MovieRepository.getMovieRepository().removeAll();
                 MovieRepository.getMovieRepository().addAllMovies(cachedMovies);
             } catch (MovieApiException e) {
+                UiLoader.setMainStageTitle("FHMDb (Offline-Mode)");
+                offlineLabel.setVisible(true);
                 UiLoader.showError("API connection failed","Couldn't establish a connection to the API. Check your internet connection.");
                 try {
                     cachedMovies = MovieEntity.toMovies(MovieRepository.getMovieRepository().getAllMovies());
@@ -200,7 +213,7 @@ public class HomeController implements Initializable {
 
         Genre searchGenre = genreMap.getOrDefault(genreComboBox.getValue(), Genre.ALL);
         double rating = Double.parseDouble(ratingComboBox.getValue() == null || ratingComboBox.getValue().equals("All") ? "0" : ratingComboBox.getValue());
-        int releaseYear = Integer.parseInt(releaseYearComboBox.getValue() == null || releaseYearComboBox.getValue().equals("All") ? "-1" : releaseYearComboBox.getValue());
+        int releaseYear = Integer.parseInt(releaseYearComboBox.getValue() == null || releaseYearComboBox.getValue().equals("All") ? "0" : releaseYearComboBox.getValue());
 
         observableMovies.addAll(filterApiMovies(searchField.getText(), searchGenre, releaseYear, rating));
         sortMovies(observableMovies, sortBtn.getText().equals("Sort (asc)"));
@@ -276,10 +289,14 @@ public class HomeController implements Initializable {
      * @return Filtered movie list
      */
     public List<Movie> filterApiMovies(String query, Genre genre, int releaseYear, double rating) {
-        List<Movie> filteredMovies = null;
+        List<Movie> filteredMovies;
         try {
+            UiLoader.setMainStageTitle("FHMDb");
+            offlineLabel.setVisible(false);
             filteredMovies = api.loadMovies(query, genre, releaseYear, rating);
         } catch (MovieApiException e) {
+            UiLoader.setMainStageTitle("FHMDb (Offline-Mode)");
+            offlineLabel.setVisible(true);
             try {
                 cachedMovies = MovieEntity.toMovies(MovieRepository.getMovieRepository().getAllMovies());
             } catch (DatabaseException ex) {

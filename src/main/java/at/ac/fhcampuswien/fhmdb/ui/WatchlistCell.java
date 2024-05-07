@@ -27,9 +27,7 @@ public class WatchlistCell extends ListCell<Movie> {
     public WatchlistCell(ClickEventHandler addToWatchlistClicked) {
         super();
         watchlistBtn.setText("Remove");
-        watchlistBtn.setOnMouseClicked(mouseEvent -> {
-            addToWatchlistClicked.onClick(getItem());
-        });
+        watchlistBtn.setOnMouseClicked(mouseEvent -> addToWatchlistClicked.onClick(getItem()));
     }
 
     /**

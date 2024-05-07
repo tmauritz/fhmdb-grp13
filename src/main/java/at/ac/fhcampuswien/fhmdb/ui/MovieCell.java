@@ -1,8 +1,5 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
-import at.ac.fhcampuswien.fhmdb.controller.HomeController;
-import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
-import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
@@ -30,10 +27,7 @@ public class MovieCell extends ListCell<Movie> {
     public MovieCell(ClickEventHandler addToWatchlistClicked) {
         super();
         watchlistBtn.setText("Watchlist");
-        watchlistBtn.setOnMouseClicked(mouseEvent -> {
-            addToWatchlistClicked.onClick(getItem());
-
-        });
+        watchlistBtn.setOnMouseClicked(mouseEvent -> addToWatchlistClicked.onClick(getItem()));
     }
 
     /**

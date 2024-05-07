@@ -15,7 +15,7 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 public class MovieAPI {
-    private final String apiUrl = "https://prog2.fh-campuswien.ac.at/movies";
+    private final String apiUrl = "https://prog2.fh-campuswien.ac.at/movie";
 
     private final OkHttpClient client = new OkHttpClient();
 
@@ -48,7 +48,7 @@ public class MovieAPI {
                 .addQueryParameter("query", query)
                 .addQueryParameter("ratingFrom", Double.toString(rating));
 
-        if (releaseYear != -1) urlBuilder.addQueryParameter("releaseYear", Integer.toString(releaseYear));
+        if (releaseYear != 0) urlBuilder.addQueryParameter("releaseYear", Integer.toString(releaseYear));
         if (genre != Genre.ALL) urlBuilder.addQueryParameter("genre", genre.toString());
 
         Request request = new Request.Builder()
@@ -78,8 +78,7 @@ public class MovieAPI {
             }
 
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return new ArrayList<>();
+            throw new MovieApiException();
         }
         return new ArrayList<>();
     }

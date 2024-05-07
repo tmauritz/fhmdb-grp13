@@ -26,7 +26,8 @@
                      <Cursor fx:constant="DEFAULT" />
                   </cursor>
                </Label>
-               <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
+               <Label maxWidth="120.0" minWidth="120.0" prefWidth="120.0" styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
+               <Label fx:id="offlineLabel" text="Offline-Mode" textFill="RED" visible="false" />
             </children>
          </HBox>
          <VBox alignment="CENTER_RIGHT" maxWidth="80.0" minWidth="80.0" prefHeight="28.0" StackPane.alignment="CENTER_RIGHT">

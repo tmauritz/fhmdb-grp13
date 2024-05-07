@@ -1,9 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
 import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
-import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
-import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
-import at.ac.fhcampuswien.fhmdb.ui.UiLoader;
 
 import java.util.LinkedList;
 import java.util.List;

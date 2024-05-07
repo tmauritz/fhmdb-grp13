@@ -6,7 +6,6 @@ import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.ClickEventHandler;
-import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.UiLoader;
 import at.ac.fhcampuswien.fhmdb.ui.WatchlistCell;
 import com.jfoenix.controls.JFXListView;
@@ -24,9 +23,9 @@ public class WatchlistController implements Initializable {
 
     @FXML
     public JFXListView<Movie> watchlistListView;
-    private ObservableList<Movie> observableWatchlistMovies = FXCollections.observableArrayList();
+    private final ObservableList<Movie> observableWatchlistMovies = FXCollections.observableArrayList();
 
-    public final ClickEventHandler removeFromWatchlist = (movie) -> {
+    private final ClickEventHandler removeFromWatchlist = (movie) -> {
         try {
             WatchlistRepository.getWatchlistRepository().removeFromWatchlist(movie.getId());
             observableWatchlistMovies.remove(movie);
