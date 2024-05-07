@@ -15,7 +15,7 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 public class MovieAPI {
-    private final String apiUrl = "https://prog2.fh-campuswien.ac.at/movie";
+    private final String apiUrl = "https://prog2.fh-campuswien.ac.at/movies";
 
     private final OkHttpClient client = new OkHttpClient();
 
