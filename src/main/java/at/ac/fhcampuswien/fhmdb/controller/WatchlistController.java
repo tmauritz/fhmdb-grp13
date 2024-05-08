@@ -44,7 +44,6 @@ public class WatchlistController implements Initializable {
         try {
             watchlistEntities = WatchlistRepository.getWatchlistRepository().getWatchlist();
         } catch (DatabaseException e) {
-            e.printStackTrace();
             UiLoader.showError("Database Error", "Could not load Watchlist. Check your database connection.", e);
         }
         if(watchlistEntities != null){
@@ -53,7 +52,6 @@ public class WatchlistController implements Initializable {
                     Movie movie = MovieRepository.getMovieRepository().getMovie(entity.getApiId());
                     observableWatchlistMovies.add(movie);
                 } catch (DatabaseException e) {
-                    e.printStackTrace();
                     UiLoader.showError("Database Error", "Could not load movie with ID " + entity.getApiId() + ". Check your database connection.");
                 }
             });
