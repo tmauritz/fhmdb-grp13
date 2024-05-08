@@ -77,7 +77,7 @@ public class HomeController implements Initializable {
                 UiLoader.showError("Error communicating with Database", ex.getMessage(), ex);
             }
             if(!onWatchlist){
-                e.printStackTrace();
+                //e.printStackTrace();
                 UiLoader.showError("Watchlist Error", e.getMessage(), e);
             }
         }
